@@ -15,7 +15,7 @@
 각 테스트 케이스에 대해 마지막 데이터가 처리되는 컴퓨터의 번호를 출력한다.
 '''
 
-
+#브론즈2
 
 for _ in range(int(input())):
     a,b = map(int, input().split())
