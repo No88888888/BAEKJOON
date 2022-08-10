@@ -25,7 +25,7 @@ descending
 예제 출력 3 
 mixed
 '''
-
+# 내장함수 X, 얕은복사 이용
 def down(arr):    # 내림차순
     for _ in range(llen(arr)):
         for j in range(llen(arr)-1):
@@ -40,7 +40,7 @@ def up(arr):    # 오름차순
                 arr[j], arr[j+1] = arr[j+1], arr[j]
     return arr
 
-def llen(arr):
+def llen(arr):  # len함수
     count = 0
     for _ in arr:
         count += 1
@@ -49,18 +49,19 @@ def llen(arr):
 
 
 note = list(map(int, input().split()))
-note_copy = note[:]
-if note == down(note_copy):
+note_copy = note[:]     # 얕은복사
+if note == down(note_copy):     # 복사없이 함수 돌리면 note 자체가 변경 됨
     print('descending')
 elif note == up(note_copy):
     print('ascending')
 else:
     print('mixed')
 
-# note = list(map(int, input().split()))
-# if note == [1,2,3,4,5,6,7,8]:
-#     print('ascending')
-# elif note == [8,7,6,5,4,3,2,1]:
-#     print('descending')
-# else:
-#     print('mixed')
+# 쉬운 풀이
+note = list(map(int, input().split()))
+if note == [1,2,3,4,5,6,7,8]:
+    print('ascending')
+elif note == [8,7,6,5,4,3,2,1]:
+    print('descending')
+else:
+    print('mixed')
