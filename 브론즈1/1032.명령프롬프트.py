@@ -14,12 +14,12 @@ dir *.exe라고 치면 확장자가 exe인 파일이 다 나온다. "dir 패턴"
 '''
 
 N = int(input())
-a = list(input())
+a = list(input())           # 첫번째 파일 명
 for i in range(1, N):
-    b = list(input())
-    for j in range(len(a)):
-        if a[j] != b[j]:
-            a[j] = '?'
+    b = list(input())       # 비교할 파일 명
+    for j in range(len(a)): 
+        if a[j] != b[j]:    # 문자열 비교하여 다른 부분있다면
+            a[j] = '?'      # a파일 해당부분 ?로 치환
 print(''.join(a))
 
 # 1시간 이상 고민하다 구글 검색
