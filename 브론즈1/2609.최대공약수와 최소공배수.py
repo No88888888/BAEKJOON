@@ -12,39 +12,87 @@ import sys
 input = sys.stdin.readline
 
 A, B = map(int, input().split())
-gongyaksu = ""
-gongbaesu = ""
-baesu = 1
 
-A_bs = []
-B_bs = []
-for i in range(1, max(A, B)+1):
+for i in range(min(A,B), 0, -1): # 더 빨리 찾기 위해 range -1
     if A%i == 0 and B%i == 0:
-        gongyaksu = i
-#     if A%i == 0:
-#         A_ys += [i]
-#     if B%i == 0:
-#         B_ys += [i]
+        YS = i                   # 최대공약수
+        break
+    
+BS = YS * (A//YS) * (B//YS)      # 최소공배수
 
-# for i in range(len(A_ys)):
-#     if A_ys[i] in B_ys:
-#         gongyaksu = A_ys[i]
-out = 1
-while out == 1:
-    A_bs += [A*baesu]
-    B_bs += [B*baesu]
-    if A >= B:
-        if B_bs[baesu-1] in A_bs:
-            gongbaesu = B_bs[baesu-1]
-            out = 0
-    if B > A:    
-        if A_bs[baesu-1] in B_bs:
-            gongbaesu = A_bs[baesu-1]
-            out = 0
-    else:
-        baesu += 1
-print(gongyaksu)
-print(gongbaesu)
+print(YS)
+print(BS)
+
+# 밑 3 풀이는 답은 맞으나 백준에서 시간초과
+# ----------------------------------------
+# import sys
+# input = sys.stdin.readline
+# 
+# A, B = map(int, input().split())
+# gongyaksu = ""
+# gongbaesu = ""
+# baesu = 1
+# 
+# A_bs = []
+# B_bs = []
+# for i in range(1, max(A, B)+1):
+    # if A%i == 0 and B%i == 0:
+        # gongyaksu = i
+# out = 1
+# while out == 1:
+    # A_bs += [A*baesu]
+    # B_bs += [B*baesu]
+    # if A >= B:
+        # if B_bs[baesu-1] in A_bs:
+            # gongbaesu = B_bs[baesu-1]
+            # out = 0
+    # if B > A:    
+        # if A_bs[baesu-1] in B_bs:
+            # gongbaesu = A_bs[baesu-1]
+            # out = 0
+    # else:
+        # baesu += 1
+# print(gongyaksu)
+# print(gongbaesu)
+# --------------------------------------
+# import sys
+# input = sys.stdin.readline
+
+# gongyaksu = ""
+# gongbaesu = ""
+# A, B = map(int, input().split())
+# C = A*B
+# list = []
+# for i in range(1,C+1):
+#     if C%i == 0:
+#         list += [i]
         
+# for i in list:
+#     if A%i == 0 and B%i == 0:
+#         gongyaksu = i
+# for i in list:
+#     if i%A == 0 and i%B == 0:
+#         gongbaesu = i
+#         break
+# print(gongyaksu)
+# print(gongbaesu)
+
+# ----------------------------------------------
+# import sys
+# input = sys.stdin.readline
+
+# A, B = map(int, input().split())
+# C = A*B                             # 두 수의 곱
+# YS = ""
+# BS = ""
+# for i in range(1,C+1):
+#     if C%i == 0:
+#         if A%i == 0 and B%i == 0:   # C의 약수 중 A,B를 나눈 나머지가 0인 수 중 최대값
+#             YS = i
+#         elif i%A == 0 and i%B == 0: # C의 약수 중 A,B로 나눈 나머지가 0인 수 중 최소값 
+#             BS = i
+#             break
+# print(YS)
+# print(BS)
         
         
