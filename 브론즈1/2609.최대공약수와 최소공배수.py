@@ -8,23 +8,27 @@
 출력
 첫째 줄에는 입력으로 주어진 두 수의 최대공약수를, 둘째 줄에는 입력으로 주어진 두 수의 최소 공배수를 출력한다.
 '''
+import sys
+input = sys.stdin.readline
+
 A, B = map(int, input().split())
 gongyaksu = ""
 gongbaesu = ""
 baesu = 1
-A_ys = []
-B_ys = []
+
 A_bs = []
 B_bs = []
 for i in range(1, max(A, B)+1):
-    if A%i == 0:
-        A_ys += [i]
-    if B%i == 0:
-        B_ys += [i]
+    if A%i == 0 and B%i == 0:
+        gongyaksu = i
+#     if A%i == 0:
+#         A_ys += [i]
+#     if B%i == 0:
+#         B_ys += [i]
 
-for i in range(len(A_ys)):
-    if A_ys[i] in B_ys:
-        gongyaksu = A_ys[i]
+# for i in range(len(A_ys)):
+#     if A_ys[i] in B_ys:
+#         gongyaksu = A_ys[i]
 out = 1
 while out == 1:
     A_bs += [A*baesu]
