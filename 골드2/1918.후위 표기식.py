@@ -24,35 +24,35 @@ sik = list(input())
 stack = []
 result = []
 for i in sik:
-    if not i in '*/+-()':
+    if not i in '*/+-()':   # 문자면 result에 바로 추가
         result.append(i)
-    elif i == '(':
+    elif i == '(':          # (면 stack에 그냥 추가
         stack.append(i)
-    elif i in '*/':
-        if stack == []:
+    elif i in '*/':         # */면
+        if stack == []:     # stack 비었으면 그냥 추가
             stack.append(i)
-        else:
+        else:               # 안 비었으면 */보다 낮은 연산자나올때까지 pop
             while stack[-1] in '*/':
                 result.append(stack.pop())
                 if stack == []:
                     break
+            stack.append(i) # 그리고 stack에 추가
+    elif i in '+-':         # +-면
+        if stack == []:     # stack 비었으면 그냥 추가
             stack.append(i)
-    elif i in '+-':
-        if stack == []:
-            stack.append(i)
-        else:
+        else:               # 안 비었으면 (전까지 혹은 stack빌때까지 pop
             while stack[-1] != '(':
                 result.append(stack.pop())
                 if stack == []:
                     break
-            stack.append(i)
-    elif i == ')':
-        while stack[-1] != '(':
+            stack.append(i) #그리고 stack에 추가
+    elif i == ')':          # )면
+        while stack[-1] != '(': # (나올떄까지 pop
             result.append(stack.pop())
-        stack.pop()
-while stack !=[]:
+        stack.pop()         #(도 pop
+while stack !=[]:           # stack에 남은 연산자 result에 추가
     result.append(stack.pop())
-print(''.join(result))
+print(''.join(result))      # 출력
 
 # 정리보고 깨끗히 쓴 코드
 sik = list(input())
