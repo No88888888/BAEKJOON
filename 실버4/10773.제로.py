@@ -18,6 +18,8 @@
 출력
 재민이가 최종적으로 적어 낸 수의 합을 출력한다. 최종적으로 적어낸 수의 합은 231-1보다 작거나 같은 정수이다.
 '''
+import sys
+input = sys.stdin.readline
 
 K = int(input())
 stack = []
