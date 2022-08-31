@@ -19,37 +19,37 @@ A= []
 B= []
 for i in password:
     if i in 'aeiou':
-        A.append(i)
+        A.append(i)                     # 모음 
     else:
-        B.append(i)    
+        B.append(i)                     # 자음
 subset = [[]]
 result = []
 ans = []
-for char in password:                   # 부분집합 구하기
+for char in password:                   # 모든 부분집합 구하기
     for i in range(len(subset)):
         subset.append(subset[i]+[char])
         
 for i in range(len(subset)):            # 조건맞는 부분집합만 result 저장
     for j in range(len(subset[i])):
-        if len(subset[i]) == L and subset[i][j] in 'aeiou':
+        if len(subset[i]) == L and subset[i][j] in A:   # 길이 L이고 모음이 포함되고
             cnt = 0
             for k in range(len(B)):
                 for h in range(len(subset[i])):
                     if subset[i][h] == B[k]:
                         cnt +=1
-                    if cnt >= 2:
-                        result.append(subset[i])
+                    if cnt >= 2:                        # 자음 개수가 2개 이상이면
+                        result.append(subset[i])        # result에 추가
                         break
 
-for i in result:
+for i in result:                    # 글자 순서 sort
     i.sort()
 
-for i in range(len(result)):
+for i in range(len(result)):        # 문자 형태로 list 벗기기
     ans.append(''.join(result[i]))
 
-res = sorted(set(ans))
+res = sorted(set(ans))              # 중복 제거, 사전 순서로 정렬
 
-for i in res:
+for i in res:                       # 하나씩 출력
     print(i)
     
 
