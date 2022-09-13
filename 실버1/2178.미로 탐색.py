@@ -42,7 +42,7 @@ for i in range(N+2):
     for j in range(M+2):
         if maze[i][j] == 0:
             visited[i][j] = 1       # maze의 길 말고는 전부 1로 변환
-stx,sty = 1, 1                      # 출발 좌표
+stx,sty = 1, 1                      # 출발 좌표 
 
 print(bfs(stx,sty))
 
