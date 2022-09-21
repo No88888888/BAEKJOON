@@ -22,20 +22,51 @@
 상근이가 모든 국가를 여행하기 위해 타야 하는 비행기 종류의 최소 개수를 출력한다.
 '''
 
-for tc in range(1):
+# def dfs(v):
+#     global visited
+#     visited[v] = 1
+#     stack = [v]
+#     count = 0
+#     while stack:
+#         stack.pop()
+#         for w in adjList[v]:
+#             if visited[w] == 0:
+#                 stack.append(w)
+#                 visited[w] = 1
+#                 v = w
+#                 count += 1
+#                 break
+#     return count
+import sys
+input = sys.stdin.readline
+def dfs(v):
+    global visited
+    global count
+    visited[v] = 1
+    for w in adjList[v]:
+            if visited[w] == 0:
+                count+=1
+                dfs(w)
+    return count
+    
+
+for tc in range(int(input())):
     N, M = map(int, input().split())
-    ch1, ch2 = [0]*(N+1), [0]*(N+1)
+    adjList = [[] for _ in range(N+1)]
     for _ in range(M):
         a, b = map(int, input().split())
         adjList[a].append(b)
         adjList[b].append(a)
-    print(adjList)
-    
-import sys
-input = sys.stdin.readline
+    visited = [0]*(N+1)
+    count = 0
+    print(dfs(1))
 
-for tc in range(int(input())):
-    N, M = map(int, input().split())
-    for _ in range(M):
-        a, b = map(int, input().split())
-    print(N-1)
+
+
+    
+
+# for tc in range(int(input())):
+#     N, M = map(int, input().split())
+#     for _ in range(M):
+#         a, b = map(int, input().split())
+#     print(N-1)
