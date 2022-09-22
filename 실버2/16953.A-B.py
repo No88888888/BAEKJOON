@@ -14,7 +14,7 @@ A를 B로 바꾸는데 필요한 연산의 최솟값에 1을 더한 값을 출�
 '''
 
 # A, B = map(int, input().split())
-1
+
 # arr = [0]*10**10
 # arr[1] = A
 # i = 1
@@ -69,47 +69,72 @@ A를 B로 바꾸는데 필요한 연산의 최솟값에 1을 더한 값을 출�
 #     print(cnt)
 # else:
 #     print(-1)
-    
-    
 # ----------------------------
-# def enq(last):
-#     if tree[last] > B:
-#         return
-#     if tree[last] == B:
-#         return last
-#     last+=1
-#     c = last
-#     p = c//2
-#     while c < len(tree):
-#         if c%2==0:
-#             tree[c] = tree[p]*2
-#             enq(c)
-            
-#         elif c%2==1:
-#             tree[c] = tree[p]*10+1
-#             enq(c)
-           
-    
-# A, B = map(int, input().split())
-# tree = [0]*10**2
-# tree[1]= A
-# last= 1
-# print(enq(last))
+import sys
+input = sys.stdin.readline
+def enq(last):
+    global res
+    if last >= 2**cnt:
+        return
+
+    if tree[last] == B:
+        res = last
+        return 1
+
+    last+=1
+    c = last
+    p = c//2
+    while c < len(tree):
+        if c%2==0:
+            tree[c] = tree[p]*2
+            if enq(c):
+                return 1
+            else:
+                return 0
+
+        elif c%2==1:
+            tree[c] = tree[p]*10+1
+            if enq(c):
+                return 1
+            else:
+                return 0
+    return 0
+
+A, B = map(int, input().split())
+tmpB = B
+cnt = 0
+while tmpB >= A:
+    tmpB//=2
+    cnt += 1
+tree = [0]*(2**cnt+1)
+tree[1]= A
+last= 1
+res = 0
+enq(last)
+result = 0
+if res:
+    while res > 0:
+        res //=2
+        result += 1
+        
+    print(result)
+else:
+    print(-1)
 
 # ------------------------------
-A, B = map(int, input().split())
-cnt = 1
-res = 0
-while B>=A:             # B에서 A를 찾아가는 방식
-    if B%2 == 1:        # 2배 혹은 10배 +1 밖에 없으므로 B가 홀수면
-        B = (B-1)/10    # 1을 빼고 10으로 나눈다 
-        cnt +=1         # 횟수 +1
-    else:               # 짝수라면
-        B = B/2         # 2로 나눈다
-        cnt +=1         # 횟수 +1
-    if B == A:          # A가 됐다면
-        res = cnt       # 카운트 저장
-if res:                 
-    print(res)
-else:                   # A가 안만들어지면 res = 0
-    print(-1)
+# A, B = map(int, input().split())
+# cnt = 1
+# res = 0
+# while B>=A:             # B에서 A를 찾아가는 방식
+#     if B%2 == 1:        # 2배 혹은 10배 +1 밖에 없으므로 B가 홀수면
+#         B = (B-1)/10    # 1을 빼고 10으로 나눈다 
+#         cnt +=1         # 횟수 +1
+#     else:               # 짝수라면
+#         B = B/2         # 2로 나눈다
+#         cnt +=1         # 횟수 +1
+#     if B == A:          # A가 됐다면
+#         res = cnt       # 카운트 저장
+# if res:                 
+#     print(res)
+# else:                   # A가 안만들어지면 res = 0
+#     print(-1)
