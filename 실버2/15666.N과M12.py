@@ -3,6 +3,9 @@
 N개의 자연수와 자연수 M이 주어졌을 때, 아래 조건을 만족하는 길이가 M인 수열을 모두 구하는 프로그램을 작성하시오.
 
 N개의 자연수 중에서 M개를 고른 수열
+같은 수를 여러 번 골라도 된다.
+고른 수열은 비내림차순이어야 한다.
+길이가 K인 수열 A가 A1 ≤ A2 ≤ ... ≤ AK-1 ≤ AK를 만족하면, 비내림차순이라고 한다.
 입력
 첫째 줄에 N과 M이 주어진다. (1 ≤ M ≤ N ≤ 8)
 
@@ -13,57 +16,24 @@ N개의 자연수 중에서 M개를 고른 수열
 
 수열은 사전 순으로 증가하는 순서로 출력해야 한다.
 '''
-
+from collections import deque
 import sys
 input = sys.stdin.readline
-
-# def f(s, t, r):
-#     global comb
-#     if s == r:
-#         comb.add(tuple(p))
-
-#     else:
-#         for j in range(t):
-#             if used[j] == 0:
-#                 used[j] = 1
-#                 p[s] = arr[j]
-#                 f(s+1, t, r)
-#                 used[j] = 0
-
-
-
-# N, M = map(int, input().split())
-# arr = list(map(int, input().split()))
-# used = [0]*N
-# p = [0]*M
-# comb = set()
-# f(0,N,M)
-# res = []
-# for i in comb:
-#     res.append(i)
-# res.sort()
-# for i in res:
-#     print(*i)
-
-
-def nCm():
+def nCm(start):
     if len(s) == M:
         print(*s)
         return
-
     r = 0
-    for i in range(N):
-        if used[i] == 0 and r != arr[i]:
-            used[i] = 1
+    for i in range(start, N):
+        if r != arr[i]:
             r = arr[i]
             s.append(arr[i])
-            nCm()
+            nCm(i)
             s.pop()
-            used[i] = 0
         
+
+
 N, M = map(int, input().split())
 arr = sorted(list(map(int, input().split())))
 s = []
-used = [0]*(N+1)
-nCm()
-
+nCm(0)
