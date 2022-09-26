@@ -29,7 +29,7 @@
 #                 return 0 
 def dfs(v):                 # 재귀 dfs
     visited[v] = 1
-    print(v, end=' ')       
+    print(v, end=' ')
     for i in adjList[v]:
         if visited[i] == 0:
             dfs(i)
@@ -47,7 +47,7 @@ def bfs(v):                 # bfs
             if not visited[i]:
                 q.append(i)
                 visited[i] = 1
-   
+
 
 N, M, V = map(int, input().split())
 adjList = [[] for _ in range(N+1)]
