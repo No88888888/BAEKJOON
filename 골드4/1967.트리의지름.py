@@ -1,46 +1,37 @@
 import sys
 sys.setrecursionlimit(100000)
+def diameter(node):
+    global maxV
+    global now_distance
+    if len(arr[node]) == 1 and now_distance != 0:   # 리프노드이고 현재합이 0이 아니라면(시작리프노드 예외위해)
+        if now_distance > maxV:                     # 현재 합이 최대값보다 크면
+            maxV = now_distance                     # 최대값 변경
+        return                                      # 리턴
+    for w in arr[node]:         # 이웃한 노드 중
+        if visited[w[0]]:       # 방문했다면
+            continue            # 다음 노드 확인
+        now_distance += w[1]    # 방문안했으면 가중치 더하고
+        visited[w[0]] = 1       # 방문 표시
+        diameter(w[0])          # 해당 노드에서 다시 탐색
+        now_distance -= w[1]    # return되어 돌아오면 이전 노드로 돌아가기 위해 직전 가중치 뺴고
+        visited[w[0]] = 0       # 방문 표시 0으로
 
-def solution(root, count):
-    count += 1
-    global now_distance, max_distance
-    if len(arr[root]) == 1 and count != 1:
-        # print(now_distance)
-        max_distance = max(max_distance, now_distance)
-        return
-    else:
-        for number, distance in arr[root]:
-            if visited[number]:
-                continue
-            else:
-                visited[root] = 1
-                now_distance += distance
-                print(f'number:{number}')
-                solution(number, count)
-                now_distance -= distance
-                visited[root] = 0
-
-
-
-N = int(sys.stdin.readline())
+N = int(input())
 arr = [[] for _ in range(N+1)]
-list_a = []
-for _ in range(N-1):
-    start, end, distance = map(int, sys.stdin.readline().split())
-    arr[start].append((end, distance))
-    arr[end].append((start, distance)) # 한방향 => 위쪽 올라가는 형태
-print(arr)
-for i in arr: # 가운데껀 셀 필요가 없다.
-    if len(i) == 1:
-        list_a.append(arr.index(i))
-
-# print(list_a)
-visited = [0] * (N+1)
-max_distance = 0
-
-for i in list_a:
-    # print(f"#{i}")
-    now_distance = 0
-    count = 0 # 첫번째를 방지하기 위한 방법
-    solution(i, count)
-print(max_distance)
+for i in range(N-1):
+    start, end, weight = map(int, input().split())  # 부모, 자식, 가중치
+    arr[start].append((end, weight))                # 양방향 그래프로 저장
+    arr[end].append((start,weight))
+    
+leaf_node = []              # leaf 노드 인덱스만 list_a에 따로 저장
+for i in range(len(arr)):
+    if len(arr[i]) == 1:
+        leaf_node.append(i)
+        
+maxV = 0                    # 지름 최대값 저장할 maxV
+for i in leaf_node:
+    visited = [0]*(N+1)
+    visited[i] = 1
+    now_distance = 0        # 더해가는 가중치를 저장할 now_distance
+    diameter(i)             # 각 리프노드에서 탐색 시작
+print(maxV)                 # 최종 maxV에 저장 된 값 출력
