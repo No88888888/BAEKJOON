@@ -10,6 +10,7 @@ N이 주어졌을 때, 퀸을 놓는 방법의 수를 구하는 프로그램을 
 출력
 첫째 줄에 퀸 N개를 서로 공격할 수 없게 놓는 경우의 수를 출력한다.
 '''
+
 def queen(i):
     global arr, cnt
     if len(arr) == N:   # 퀸을 끝줄까지 놨다면
@@ -32,7 +33,6 @@ arr = []
 cnt = 0
 queen(0)
 print(cnt)
-
 
 # def queen():
 #     if len(arr) == N:
