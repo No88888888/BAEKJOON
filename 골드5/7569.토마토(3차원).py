@@ -62,27 +62,28 @@ def bfs():
     while tomato:                       
         new_tomato = deque()            # 날마다 새로 익은 토마토 좌표를 저장할 변수
         for _ in range(len(tomato)):    # 익은 토마토 자리에서 탐색
-            Q = tomato.popleft()
-            h, i, j = Q[0], Q[1], Q[2]
+            h, i, j = tomato.popleft()
             for dh, di, dj in delta:    # 높이, 가로, 세로
                 nh, ni,nj = h + dh, i + di, j + dj
-                if 0 <= nh < H and 0<= ni < N and 0 <= nj < M and tmt[nh][ni][nj] == 0: # 범위 내고 안익은 토마토라면
-                    tmt[nh][ni][nj] = 1             # 익히고
+                if 0 <= nh < H and 0<= ni < N and 0 <= nj < M and box[nh][ni][nj] == 0: # 범위 내고 안익은 토마토라면
+                    box[nh][ni][nj] = 1             # 익히고
                     new_tomato.append((nh,ni,nj))   # 해당 좌표 저장
         tomato = new_tomato     # 새로익은 토마토 자리에서만 탐색하기 위해
         day += 1                # 날짜 +1
-    if sum(sum(tmt,[]),[]).count(0):    # 익을 수 있는 토마토가 다 익은 후 아직 안익은 토마토가 있다면
-        day = -1                        # -1
+    if i in sum(sum(box,[]),[]):    # 익을 수 있는 토마토가 다 익은 후 아직 안익은 토마토가 있다면
+        if i == 0:
+            day = -1                        # -1
 
 M,N,H = map(int, input().split())
-tmt = [[list(map(int, input().split())) for _ in range(N)] for _ in range(H)]
+box = [[list(map(int, input().split())) for _ in range(N)] for _ in range(H)]
+day = -1    # 토마토가 다 익고 나서도 한번 더 확인한 후 day + 1하기 때문에 -1로 초기값 설정 
 tomato = deque()
 for k in range(H):
     for i in range(N):  
         for j in range(M):
-            if tmt[k][i][j] == 1:
+            if box[k][i][j] == 1:
                 tomato.append((k,i,j))  # 익은 토마토의 좌표를 저장
-day = -1    # 토마토가 다 익고 나서도 한번 더 확인한 후 day + 1하기 때문에 -1로 초기값 설정 
+
 bfs()
 print(day)
 
