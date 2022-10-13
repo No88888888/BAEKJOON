@@ -16,6 +16,41 @@
 출력
 여러분은 토마토가 모두 익을 때까지 최소 며칠이 걸리는지를 계산해서 출력해야 한다. 만약, 저장될 때부터 모든 토마토가 익어있는 상태이면 0을 출력해야 하고, 토마토가 모두 익지는 못하는 상황이면 -1을 출력해야 한다.
 '''
+from collections import deque
+import sys
+input = sys.stdin.readline
+def bfs():
+    delta = [(0,-1,0),(0,0,1),(0,1,0),(0,0,-1),(1,0,0),(-1,0,0)] # 앞뒤좌우 위아래
+    global day, tomato
+    while tomato:                       
+        new_tomato = deque()            # 날마다 새로 익은 토마토 좌표를 저장할 변수
+        for _ in range(len(tomato)):    # 익은 토마토 자리에서 탐색
+            h, i, j = tomato.popleft()
+            for dh, di, dj in delta:    # 높이, 가로, 세로
+                nh, ni,nj = h + dh, i + di, j + dj
+                if 0 <= nh < H and 0<= ni < N and 0 <= nj < M and box[nh][ni][nj] == 0: # 범위 내고 안익은 토마토라면
+                    box[nh][ni][nj] = 1             # 익히고
+                    new_tomato.append((nh,ni,nj))   # 해당 좌표 저장
+        tomato = new_tomato     # 새로익은 토마토 자리에서만 탐색하기 위해
+        day += 1                # 날짜 +1
+    if i in sum(sum(box,[]),[]):    # 익을 수 있는 토마토가 다 익은 후 아직 안익은 토마토가 있다면
+        if i == 0:
+            day = -1                        # -1
+
+M,N,H = map(int, input().split())
+box = [[list(map(int, input().split())) for _ in range(N)] for _ in range(H)]
+day = -1    # 토마토가 다 익고 나서도 한번 더 확인한 후 day + 1하기 때문에 -1로 초기값 설정 
+tomato = deque()
+for k in range(H):
+    for i in range(N):  
+        for j in range(M):
+            if box[k][i][j] == 1:
+                tomato.append((k,i,j))  # 익은 토마토의 좌표를 저장
+
+bfs()
+print(day)
+
+
 # from collections import deque
 # import copy
 # import sys
@@ -53,39 +88,6 @@
 # print(day)
 
 
-from collections import deque
-import sys
-input = sys.stdin.readline
-def bfs():
-    delta = [(0,-1,0),(0,0,1),(0,1,0),(0,0,-1),(1,0,0),(-1,0,0)] # 앞뒤좌우 위아래
-    global day, tomato
-    while tomato:                       
-        new_tomato = deque()            # 날마다 새로 익은 토마토 좌표를 저장할 변수
-        for _ in range(len(tomato)):    # 익은 토마토 자리에서 탐색
-            h, i, j = tomato.popleft()
-            for dh, di, dj in delta:    # 높이, 가로, 세로
-                nh, ni,nj = h + dh, i + di, j + dj
-                if 0 <= nh < H and 0<= ni < N and 0 <= nj < M and box[nh][ni][nj] == 0: # 범위 내고 안익은 토마토라면
-                    box[nh][ni][nj] = 1             # 익히고
-                    new_tomato.append((nh,ni,nj))   # 해당 좌표 저장
-        tomato = new_tomato     # 새로익은 토마토 자리에서만 탐색하기 위해
-        day += 1                # 날짜 +1
-    if i in sum(sum(box,[]),[]):    # 익을 수 있는 토마토가 다 익은 후 아직 안익은 토마토가 있다면
-        if i == 0:
-            day = -1                        # -1
-
-M,N,H = map(int, input().split())
-box = [[list(map(int, input().split())) for _ in range(N)] for _ in range(H)]
-day = -1    # 토마토가 다 익고 나서도 한번 더 확인한 후 day + 1하기 때문에 -1로 초기값 설정 
-tomato = deque()
-for k in range(H):
-    for i in range(N):  
-        for j in range(M):
-            if box[k][i][j] == 1:
-                tomato.append((k,i,j))  # 익은 토마토의 좌표를 저장
-
-bfs()
-print(day)
 
 
 # import sys
