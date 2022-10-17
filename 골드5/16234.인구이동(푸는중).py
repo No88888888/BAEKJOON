@@ -23,31 +23,69 @@ N×N크기의 땅이 있고, 땅은 1×1개의 칸으로 나누어져 있다. �
 출력
 인구 이동이 며칠 동안 발생하는지 첫째 줄에 출력한다.
 '''
-def find_set(x,y):
-    while key[x][y] != (x,y):
-        (x,y) = key[x][y]
-    return (x,y)
+def bfs():
+    delta = [(-1,0),(0,1),(1,0),(0,-1)]
+    for i in range(N):
+        for j in range(N):
+            visited = [[0]*N for _ in range(N)]
+            q = [(i,j)]
+            stack = [(i,j)]
+            s=nation[i][j]
+            
+            cnt = 0
+            while q:
+                i, j = q.pop()
+                for di, dj in delta:
+                    ni, nj = i + di, j + dj
+                    if 0<= ni < N and 0 <= nj < N and L <= abs(nation[i][j] - nation[ni][nj]) <= R:
+                        q.append((ni,nj))
+                        stack.append((ni,nj))
+                        s += nation[ni][nj]
+                        cnt += 1
+            if len(stack) >= 2:
+                for i, j in stack:
+                    nation[i][j] = s//cnt
+                print(nation)
+                
 
-def union(x,y,p,q):
-    key[p][q] = find_set(x,y)
-    
-    
+                    
+# from collections import deque
 N, L, R = map(int, input().split())
 nation = [list(map(int, input().split())) for _ in range(N)]
-delta = [(-1,0),(0,1),(1,0),(0,-1)]
-while len(set(sum(key, []))) > 1:
-    key = [[0]*N for _ in range(N)]
-    for i in range(N):
-        for j in range(N):
-            key[i][j] = (i,j)
+bfs()
+# def find_set(x,y):
+#     while key[x][y] != (x,y):
+#         (x,y) = key[x][y]
+#     return (x,y)
 
-    for i in range(N):
-        for j in range(N):
-            for di, dj in delta:
-                ni, nj = i + di, j + dj
-                if 0<= ni < N and 0 <= nj < N and L <= abs(nation[i][j] - nation[ni][nj]) <= R:
-                    if find_set(i,j) != find_set(ni,nj):
-                        union(i,j,ni,nj)
+# def union(x,y,p,q):
+#     key[p][q] = find_set(x,y)
     
+    
+# N, L, R = map(int, input().split())
+# nation = [list(map(int, input().split())) for _ in range(N)]
+# delta = [(-1,0),(0,1),(1,0),(0,-1)]
+# key = [[0]*N for _ in range(N)]
+# day = 0
+# for i in range(N):
+#     for j in range(N):
+#         key[i][j] = (i,j)
 
-print(key)
+# while len(set(sum(key, []))) > 1:
+#     day += 1
+#     for i in range(N):
+#         for j in range(N):
+#             for di, dj in delta:
+#                 ni, nj = i + di, j + dj
+#                 if 0<= ni < N and 0 <= nj < N and L <= abs(nation[i][j] - nation[ni][nj]) <= R:
+#                     if find_set(i,j) != find_set(ni,nj):
+#                         union(i,j,ni,nj)
+#     arr = 
+#     for i in list(set(sum(key, []))):
+#         sum(key, []).count(i)
+        
+    
+#     break
+#     print(key)
+    
+    
