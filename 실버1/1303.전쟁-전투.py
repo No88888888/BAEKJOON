@@ -10,21 +10,48 @@ N명이 뭉쳐있을 때는 N2의 위력을 낼 수 있다. 과연 지금 난전
 출력
 첫 번째 줄에 당신의 병사의 위력의 합과 적국의 병사의 위력의 합을 출력한다.
 '''
+from collections import deque
+import sys
+input = sys.stdin.readline
+
 def bfs():
+    global battlefield, B_power, W_power
     delta = [(-1,0), (0,1), (1,0), (0,-1)]
+    
     visited = [[0]*N for _ in range(M)]
     for i in range(M):
         for j in range(N):
-            if warfield[i][j] == 'W':
-                q = [(i,j)]
-                while q:
-                    x, y = q.pop(0)
+            if battlefield[i][j] == 'W' and visited[i][j] == 0: # 'W'고 no방문이면
+                visited[i][j] = 1                               # 방문 표시
+                WQ = deque()
+                WQ.append((i,j))                                # 해당위치에서 BFS탐색
+                cnt = 1                                         # 팀원 카운트
+                while WQ:
+                    x,y = WQ.popleft()
+                    for di, dj in delta:                        # 4방탐색
+                        ni, nj = x + di, y +dj
+                        if 0 <= ni < M and 0 <= nj < N and visited[ni][nj] == 0 and battlefield[ni][nj] == 'W':                            # 주변에 팀원 있으면
+                            visited[ni][nj] = 1                 # 방문 표시
+                            WQ.append((ni,nj))                  # 인큐
+                            cnt += 1                            # 팀원 + 1
+                W_power += cnt**2                               # 해당 무리 힘을 더해줌
+            elif battlefield[i][j] == 'B' and visited[i][j] == 0:
+                visited[i][j] = 1
+                BQ = deque()
+                BQ.append((i,j))
+                cnt = 1
+                while BQ:
+                    x,y = BQ.popleft()
                     for di, dj in delta:
                         ni, nj = x + di, y +dj
-                        if 0 <= ni < M and 0 <= nj < N and visited[ni][nj] == 0 and warfield[ni][nj] == 'W':
-                            visited[ni][nj] == 1
-                            q.append((ni,nj))
+                        if 0 <= ni < M and 0 <= nj < N and visited[ni][nj] == 0 and battlefield[ni][nj] == 'B':
+                            visited[ni][nj] = 1
+                            BQ.append((ni,nj))
+                            cnt += 1
+                B_power += cnt**2
 
 N, M = map(int, input().split())
-warfield = [list(input()) for _ in range(M)]
-print(warfield)
+battlefield = [list(input()) for _ in range(M)]
+B_power, W_power = 0, 0
+bfs()
+print(W_power, B_power)
