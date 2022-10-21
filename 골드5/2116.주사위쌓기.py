@@ -17,5 +17,23 @@
 첫줄에 한 옆면의 숫자의 합이 가장 큰 값을 출력한다.
 '''
 
+def hap():
+    top_bot = {0 : 5, 1 : 3, 2 : 4, 3 : 1, 4 : 2, 5 : 0}    # 주사위 위아래 인덱스 매핑
+    maxV = 0
+    for num in dice[0]:         # 맨 밑 주사위
+        bot = num               # 밑면을 모든 경우 따짐
+        s = 0
+        for i in range(N):
+            top = dice[i][top_bot[dice[i].index(bot)]]  # top은 해당 주사위 밑면 값의 인덱스를 기준으로 찾아냄
+            tmp = dice[i][:]    # 임시 복사
+            tmp.remove(bot)     # bot과 top을 제외한 후
+            tmp.remove(top)
+            s += max(tmp)       # 그 중 최대값을 s에 더함
+            bot = top           # 다음 주사위를 위해 top을 bot으로 바꿈
+        if s > maxV:            # 모든 주사위 순회 후
+            maxV = s            # 최대값 비교하여 바꿔줌
+    return maxV                 # 최종 최대값 리턴
+            
 N = int(input())
-dice = 
+dice = [list(map(int, input().split())) for _ in range(N)]
+print(hap())
