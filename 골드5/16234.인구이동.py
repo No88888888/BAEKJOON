@@ -23,44 +23,49 @@ N×N크기의 땅이 있고, 땅은 1×1개의 칸으로 나누어져 있다. �
 출력
 인구 이동이 며칠 동안 발생하는지 첫째 줄에 출력한다.
 '''
+
+# 이중 for문을 순서대로 순회하면서
+# bfs를 통해 연합의 정보(연합국가의 수, 연합국가 총 인구수, 연합국가 각 좌표)를 저장하고
+# 탐색이 끝난 후 저장된 정보를 이용해 인구이동을 시킨다
+# 더 이상 연합이 이뤄지지 않을때까지 반복
 from collections import deque
 import sys
 input = sys.stdin.readline
 def bfs():
     delta = [(-1,0),(0,1),(1,0),(0,-1)]
     day = 0
-    flag = True
+    flag = True     # 연합이 일어나는지 확인하는 flag값
     while flag:
         visited = [[0]*N for _ in range(N)]
         stack = {}
         cnt = -1
         for i in range(N):
             for j in range(N):
-                if visited[i][j] != 1:
-                    visited[i][j] = 1
+                if visited[i][j] != 1:  # 미방문한 곳이라면
+                    visited[i][j] = 1   # 방문처리
                     q = deque()
-                    q.append((i,j))
+                    q.append((i,j))     
                     cnt +=1
-                    stack[cnt] = [1, nation[i][j], (i,j)]
-                    while q:
+                    stack[cnt] = [1, nation[i][j], (i,j)]   # 연합정보 0번 인덱스: 연합국가 수 / 1번 인덱스: 연합국가 인구 합 / 2번 인덱스: 국가 좌표
+                    while q:                                # bfs 탐색
                         x, y = q.popleft()
-                        for di, dj in delta:
+                        for di, dj in delta:       
                             ni, nj = x + di, y + dj
                             if 0<= ni < N and 0 <= nj < N and (L <= abs(nation[x][y] - nation[ni][nj]) <= R) and visited[ni][nj] == 0:
-                                visited[ni][nj] = 1
+                                visited[ni][nj] = 1             # 방문 처리
                                 q.append((ni,nj))
-                                stack[cnt][0] += 1
-                                stack[cnt][1] += nation[ni][nj]
-                                stack[cnt].append((ni,nj))
-                                flag = False
-        if flag == False:
+                                stack[cnt][0] += 1              # 연합국가 수 + 1
+                                stack[cnt][1] += nation[ni][nj] # 인구수 합 +
+                                stack[cnt].append((ni,nj))      # 국가 좌표 +
+                                flag = False                    # 연합이 일어났다는것 표시
+        if flag == False:                       # 연합 일어났으면
             for k in range(len(stack)):
                 for t in range(2,len(stack[k])):
-                        nation[stack[k][t][0]][stack[k][t][1]] = stack[k][1]//stack[k][0]
-            day +=1
-            flag = True
-        else:
-            return day        
+                        nation[stack[k][t][0]][stack[k][t][1]] = stack[k][1]//stack[k][0]   # stack 순회 돌면서 nation 에서 인구이동
+            day +=1     # 날짜 +1
+            flag = True # 다시 flag True로
+        else:           # 더이상 연합 안일어났으면
+            return day  # 날짜 리턴
 N, L, R = map(int, input().split())
 nation = [list(map(int, input().split())) for _ in range(N)]
 print(bfs())
