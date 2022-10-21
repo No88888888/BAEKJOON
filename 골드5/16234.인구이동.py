@@ -23,36 +23,48 @@ N×N크기의 땅이 있고, 땅은 1×1개의 칸으로 나누어져 있다. �
 출력
 인구 이동이 며칠 동안 발생하는지 첫째 줄에 출력한다.
 '''
+from collections import deque
+import sys
+input = sys.stdin.readline
 def bfs():
     delta = [(-1,0),(0,1),(1,0),(0,-1)]
-    for i in range(N):
-        for j in range(N):
-            visited = [[0]*N for _ in range(N)]
-            q = [(i,j)]
-            stack = [(i,j)]
-            s=nation[i][j]
-            
-            cnt = 0
-            while q:
-                i, j = q.pop()
-                for di, dj in delta:
-                    ni, nj = i + di, j + dj
-                    if 0<= ni < N and 0 <= nj < N and L <= abs(nation[i][j] - nation[ni][nj]) <= R:
-                        q.append((ni,nj))
-                        stack.append((ni,nj))
-                        s += nation[ni][nj]
-                        cnt += 1
-            if len(stack) >= 2:
-                for i, j in stack:
-                    nation[i][j] = s//cnt
-                print(nation)
-                
-
-                    
-# from collections import deque
+    day = 0
+    flag = True
+    while flag:
+        visited = [[0]*N for _ in range(N)]
+        stack = {}
+        cnt = -1
+        for i in range(N):
+            for j in range(N):
+                if visited[i][j] != 1:
+                    visited[i][j] = 1
+                    q = deque()
+                    q.append((i,j))
+                    cnt +=1
+                    stack[cnt] = [1, nation[i][j], (i,j)]
+                    while q:
+                        x, y = q.popleft()
+                        for di, dj in delta:
+                            ni, nj = x + di, y + dj
+                            if 0<= ni < N and 0 <= nj < N and (L <= abs(nation[x][y] - nation[ni][nj]) <= R) and visited[ni][nj] == 0:
+                                visited[ni][nj] = 1
+                                q.append((ni,nj))
+                                stack[cnt][0] += 1
+                                stack[cnt][1] += nation[ni][nj]
+                                stack[cnt].append((ni,nj))
+                                flag = False
+        if flag == False:
+            for k in range(len(stack)):
+                for t in range(2,len(stack[k])):
+                        nation[stack[k][t][0]][stack[k][t][1]] = stack[k][1]//stack[k][0]
+            day +=1
+            flag = True
+        else:
+            return day        
 N, L, R = map(int, input().split())
 nation = [list(map(int, input().split())) for _ in range(N)]
-bfs()
+print(bfs())
+
 # def find_set(x,y):
 #     while key[x][y] != (x,y):
 #         (x,y) = key[x][y]
@@ -87,5 +99,4 @@ bfs()
     
 #     break
 #     print(key)
-    
     
