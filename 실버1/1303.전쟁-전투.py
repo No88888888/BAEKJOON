@@ -14,44 +14,32 @@ from collections import deque
 import sys
 input = sys.stdin.readline
 
-def bfs():
-    global battlefield, B_power, W_power
-    delta = [(-1,0), (0,1), (1,0), (0,-1)]
-    
-    visited = [[0]*N for _ in range(M)]
-    for i in range(M):
-        for j in range(N):
-            if battlefield[i][j] == 'W' and visited[i][j] == 0: # 'W'고 no방문이면
-                visited[i][j] = 1                               # 방문 표시
-                WQ = deque()
-                WQ.append((i,j))                                # 해당위치에서 BFS탐색
-                cnt = 1                                         # 팀원 카운트
-                while WQ:
-                    x,y = WQ.popleft()
-                    for di, dj in delta:                        # 4방탐색
-                        ni, nj = x + di, y +dj
-                        if 0 <= ni < M and 0 <= nj < N and visited[ni][nj] == 0 and battlefield[ni][nj] == 'W':                            # 주변에 팀원 있으면
-                            visited[ni][nj] = 1                 # 방문 표시
-                            WQ.append((ni,nj))                  # 인큐
-                            cnt += 1                            # 팀원 + 1
-                W_power += cnt**2                               # 해당 무리 힘을 더해줌
-            elif battlefield[i][j] == 'B' and visited[i][j] == 0:
-                visited[i][j] = 1
-                BQ = deque()
-                BQ.append((i,j))
-                cnt = 1
-                while BQ:
-                    x,y = BQ.popleft()
-                    for di, dj in delta:
-                        ni, nj = x + di, y +dj
-                        if 0 <= ni < M and 0 <= nj < N and visited[ni][nj] == 0 and battlefield[ni][nj] == 'B':
-                            visited[ni][nj] = 1
-                            BQ.append((ni,nj))
-                            cnt += 1
-                B_power += cnt**2
+def bfs(clr, *po):                  # 해당위치에서 BFS탐색
+    global visited
+    delta = ((-1,0), (0,1), (1,0), (0,-1))
+    visited[i][j] = 1               # 방문 표시
+    q = deque()
+    q.append((po[0],po[1]))                                
+    cnt = 1                         # 팀원 카운트
+    while q:
+        x,y = q.popleft()
+        for di, dj in delta:        # 4방탐색
+            ni, nj = x + di, y +dj
+            if 0 <= ni < M and 0 <= nj < N and visited[ni][nj] == 0 and battlefield[ni][nj] == clr: # 주변에 팀원 있으면
+                visited[ni][nj] = 1 # 방문 표시
+                q.append((ni,nj))   # 인큐
+                cnt += 1            # 팀원 + 1
+    return cnt ** 2                 # 해당 무리의 힘 리턴
 
 N, M = map(int, input().split())
 battlefield = [list(input()) for _ in range(M)]
-B_power, W_power = 0, 0
-bfs()
+W_power, B_power  = 0, 0
+visited = [[0]*N for _ in range(M)]
+for i in range(M):
+    for j in range(N):
+        if visited[i][j] == 0:              # 미방문이고
+            if battlefield[i][j] == 'W':    # W면
+                W_power += bfs('W', i, j)   # 해당 무리 힘을 W_power에 더함
+            else:                           # B면
+                B_power += bfs('B', i, j)   # 해당 무리 힘을 B_power에 더함
 print(W_power, B_power)
