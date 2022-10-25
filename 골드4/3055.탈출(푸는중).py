@@ -28,3 +28,46 @@
 # 크면 이동 X
 # 이동 중 비버의 굴 도착하면 그떄의 시간 저장
 # 더이상 이동못하면 break
+import time
+R, C = map(int, input().split())
+TDDUP = [list(input()) for _ in range(R)]
+water = []
+for i in range(R):
+    for j in range(C):
+        if TDDUP[i][j] == '.':
+            TDDUP[i][j] = 0
+        if TDDUP[i][j] == '*':
+            water.append((i,j))
+        if TDDUP[i][j] == 'S':
+            Hedgehog = (i,j)
+
+delta = ((-1,0), (0,1), (1,0), (0,-1))
+while water:
+    i, j = water.pop()
+    TDDUP[i][j] = 0
+    q = []
+    q.append((i,j))
+    
+    while q:
+        x, y = q.pop(0)
+        for di, dj in delta:
+            ni, nj = x + di, y + dj
+            if 0 <= ni < R and 0 <= nj < C and str(TDDUP[ni][nj]) not in 'SDX*' and (TDDUP[ni][nj] == 0 or TDDUP[ni][nj] > TDDUP[x][y] + 1):
+                TDDUP[ni][nj] = TDDUP[x][y] + 1
+                q.append((ni, nj))
+    TDDUP[i][j] = '*'
+    
+TDDUP[Hedgehog[0]][Hedgehog[1]] = 0
+stack = [Hedgehog]
+while stack:
+    x, y = stack.pop(0)
+    for di, dj in delta:
+        ni, nj = x + di, y + dj
+        if 0 <= ni < R and 0 <= nj < C and TDDUP[ni][nj] != 0 and str(TDDUP[ni][nj]) not in 'X*':
+            if TDDUP[ni][nj] == 'D':
+                print(TDDUP[x][y] + 1)
+                break
+            elif TDDUP[ni][nj] > TDDUP[x][y] + 1:
+                TDDUP[ni][nj] = TDDUP[x][y] + 1
+                stack.append((ni,nj))
+print('KAKTUS')
