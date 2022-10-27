@@ -25,13 +25,12 @@ def bfs(x, y):
         x, y = shark.popleft()
         for di, dj in delta:
             ni, nj = x + di, y+ dj
-            if 0<= ni < N and 0 <= nj < M and not visited[ni][nj]:
-                if arr[ni][nj] == 0:
-                    visited[ni][nj] = visited[x][y] + 1
-                    shark.append((ni,nj))
-                else:
-                    visited[ni][nj] = visited[x][y] + 1
-                    result.append(visited[x][y])
+            if 0<= ni < N and 0 <= nj < M and not visited[ni][nj]:  # 범위 내면서 미방문
+                if arr[ni][nj] == 0:                    # 0이면
+                    visited[ni][nj] = visited[x][y] + 1 # 거리 표시
+                    shark.append((ni,nj))               # 인큐하고 계속 탐색
+                else:                                   # 상어면
+                    result.append(visited[x][y])        # 지금까지 거리(안전거리) result에 넣고 탐색 종료
                     return
 
 N, M = map(int, input().split())
@@ -41,8 +40,8 @@ result = []
 
 for i in range(N):
     for j in range(M):
-        if arr[i][j] == 0:
-            bfs(i, j)
-print(max(result))
+        if arr[i][j] == 0:  
+            bfs(i, j)       # 0인 곳에서 bfs 탐색 시작
+print(max(result))          # 전체 탐색 후 최대 안전거리 출력
                             
                     
