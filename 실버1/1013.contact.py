@@ -30,4 +30,34 @@
 각 테스트 케이스에 대해 주어진 전파가 문제에서 제시한 패턴이면 “YES”를 그렇지 않은 경우는 “NO”를 출력한다. 출력 문자열은 모두 대문자로 구성되어 있다.
 '''
 
+import re
+p = re.compile('(100+1+|01)+')  # 정규표현식을 컴파일하여 p변수에 저장
 T= int(input())
+for _ in range(T):
+    signal = input()
+    m = p.fullmatch(signal)     # fullmatch를 사용하면 입력된 문자열 전체가 정규표현식과 매치되는지 확인
+    if m:
+        print('YES')            # 일치한다면 YES
+    else:                       # none
+        print('NO')             # 일치 하지 않으면 NO
+# import re
+# p = re.compile('(100+1+ | 01)+')
+# print(p)
+# T= int(input())
+# for _ in range(T):
+#     signal = input()
+#     m = p.fullmatch(signal)
+#     print(m)
+#     if m:
+#         print('yes')
+    # if signal in p:
+    #     print('yes')
+    # p = re.search('[100+1+ | 01]+', signal)
+    # yes = p.group(signal)
+    # print(p.group())
+    
+    # if m: results.append("YES")
+    # else: results.append("NO")
+ 
+# for result in results:
+#     sys.stdout.write(str(result)+'\n')
