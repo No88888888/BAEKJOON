@@ -40,6 +40,7 @@ for _ in range(T):
         print('YES')            # 일치한다면 YES
     else:                       # none
         print('NO')             # 일치 하지 않으면 NO
+        
 # import re
 # p = re.compile('(100+1+ | 01)+')
 # print(p)
