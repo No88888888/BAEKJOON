@@ -26,34 +26,36 @@ NxN 크기의 시험관이 있다. 시험관은 1x1 크기의 칸으로 나누�
 출력
 S초 뒤에 (X,Y)에 존재하는 바이러스의 종류를 출력한다. 만약 S초 뒤에 해당 위치에 바이러스가 존재하지 않는다면, 0을 출력한다.
 '''
+# 1736ms
 import sys
+from collections import deque
 input = sys.stdin.readline
 
 def bfs():
     global arr
     delta = [(-1,0),(0,1),(1,0),(0,-1)]
     cnt = 0
-    while cnt < S:                          # S초 동안
+    while cnt < S:
         cnt += 1
-        for i in range(1, K+1):             # 1번 바이러스부터 탐색
-            for _ in range(len(arr[i])):    
-                p, q = arr[i].pop(0)        # 해당 좌표 다시 탐색 안하기 위해 pop
-                for di, dj in delta:        # 사방탐색
+        for i in range(1, K+1):
+            for _ in range(len(arr[i])):
+                p, q = arr[i].popleft()
+                for di, dj in delta:
                     ni, nj = p + di, q + dj
-                    if 0 < ni <= N and 0 < nj <= N and virus[ni][nj] == 0:  # 범위 내고 감염안됐으면
-                        virus[ni][nj] = i       # 해당 번호 바이러스로 감염시키고
-                        arr[i].append((ni,nj))  # 다음 탐색을 위해 좌표 저장
+                    if 0 < ni <= N and 0 < nj <= N and virus[ni][nj] == 0:
+                        virus[ni][nj] = i
+                        arr[i].append((ni,nj))
 
 
-N, K = map(int, input().split())    
-virus = [[0]*(N+1)] + [[0] + list(map(int, input().split())) for _ in range(N)] # 인덱스위한 패딩
+N, K = map(int, input().split())
+virus = [[0]*(N+1)] + [[0] + list(map(int, input().split())) for _ in range(N)]
 S, X, Y = map(int, input().split())
 
-arr = [[] for _ in range(K+1)]
+arr = [deque() for _ in range(K+1)]
 
 for i in range(1,N+1):
     for j in range(1, N+1):
         if virus[i][j] != 0:
-            arr[virus[i][j]].append((i,j)) #바이러스 번호별 좌표 저장
+            arr[virus[i][j]].append((i,j))
 bfs()
 print(virus[X][Y])
