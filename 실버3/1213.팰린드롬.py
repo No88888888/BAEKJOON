@@ -14,5 +14,31 @@
 출력
 첫째 줄에 문제의 정답을 출력한다. 만약 불가능할 때는 "I'm Sorry Hansoo"를 출력한다. 정답이 여러 개일 경우에는 사전순으로 앞서는 것을 출력한다.
 '''
+'''
+홀수인 문자 2개 이상일 시 바로 종료
+1개라면 해당 문자를 center에 넣고 하나 삭제
+0개라면 그냥바로
+남은 정렬된 문자들을 2칸씩 뛰어넘어 순회하며 res만들고
+res + center + res[::-1]하여 완성
+'''
 
-name = input()
+from collections import Counter
+word = sorted(list(input()))
+check = Counter(word)
+cnt = 0
+center = '' 
+
+for i in check:
+    if check[i]%2:
+        cnt += 1
+        center = i
+        word.remove(i)
+        
+        if cnt == 2:
+            print('I\'m Sorry Hansoo')
+            exit()
+
+half = ''
+for j in range(0, len(word), 2):
+    half += word[j]
+print(half + center + half[::-1])
