@@ -57,26 +57,19 @@ for n, m in move:
         arr[x][y] += 1                  # 물 1 증가
         visited[x][y] = visitnum        # i번째 이동 시의 구름 위치 표시
 
-    # 대각선 탐색
-    tmp = []                            # 물복사하기 위한 tmp
+    # 물복사 마법 시전
     for x, y in cloud:
-        cnt = 0
         for t in range(2, 9, 2):        
             di, dj = direct[t][0], direct[t][1]
             ni, nj = x + di, y + dj
-            if 0 <= ni < N and 0 <= nj < N and arr[ni][nj] > 0:
-                    cnt += 1
-        tmp.append(cnt)                 # 각 위치별 추가 물 양 담음
-
-    # 물복사 마법 시전
-    for r in range(C):
-        arr[cloud[r][0]][cloud[r][1]] += tmp[r] 
+            if 0 <= ni < N and 0 <= nj < N and arr[ni][nj]:
+                arr[x][y] += 1
 
     # 새 구름 생성
     cloud = []
     for p in range(N):
         for q in range(N):
-            if arr[p][q] >= 2 and visited[p][q] != visitnum:    # 수형 센세의 가르침 잊지 않았습니다...
+            if arr[p][q] >= 2 and visited[p][q] != visitnum:    # 보고 계십니까 센세...
                 arr[p][q] -= 2                                  
                 cloud.append((p,q))
                 
