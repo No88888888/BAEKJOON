@@ -24,20 +24,20 @@ delta = [(0,1), (1,1), (1,0), (1,-1)]
 
 for i in range(N):
     for j in range(N):
-        if tic[i][j] != '.':
-            for x, y in delta:
-                for k in range(1,3):
+        if tic[i][j] != '.':                        # 빈칸이 아니면
+            for x, y in delta:                      # 가로,세로,대각,역대각 탐색
+                for k in range(1,3):                # 해당 위치에서 두칸 뒤까지를 체크
                     di, dj = x * k, y * k
                     ni, nj = i + di, j + dj
-                    if 0 <= ni < N and 0 <= nj < N:
-                        if tic[i][j] != tic[ni][nj]:
-                            break
-                    else:
-                        break
-                else:
-                    print(tic[i][j])
+                    if 0 <= ni < N and 0 <= nj < N: # 범위 내면서
+                        if tic[i][j] != tic[ni][nj]:# 하나라도 같지 않다면
+                            break                   # break
+                    else:                           # 범위 벗어나면
+                        break                       # break
+                else:                               # 다 같았다면
+                    print(tic[i][j])                # 해당 이름 출력
                     exit()
-print('ongoing')
+print('ongoing')                                    # 끝까지 아무 이름도 출력 안됐다면 ongoing
 
 
 # 세글자 연속이 아니라 빙고를 찾는 줄 알고 잘못 푼 풀이
