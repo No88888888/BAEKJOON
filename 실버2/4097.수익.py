@@ -20,6 +20,7 @@
 출력
 각 테스트 케이스에 대해서 가장 많은 수익을 올린 구간의 수익을 출력한다. 단, 구간이 비어있으면 안 된다.
 '''
+
 import sys
 input = sys.stdin.readline
 
