@@ -61,42 +61,107 @@
 출력
 첫째 줄에 학생의 만족도의 총 합을 출력한다.
 '''
+# 깔끔하게 정리된 식
+import sys
+input = sys.stdin.readline
 
 N = int(input())
 student = [list(map(int, input().split())) for _ in range(N**2)]
 classroom = [[0]*N for _ in range(N)]
-delta = ((-1,0), (0,1), (1,0), (0,-1))
+delta = (-1,0), (0,1), (1,0), (0,-1)    # 상 우 하 좌
 
-
-for st in range(1):
-    possible_dict = {}
+for st in range(N**2):
+    possible_list = []
     maxV = 0
-    num = 0
     for i in range(N):
         for j in range(N):
             if not classroom[i][j]:
-                
                 like, empty, cnt = 0, 0, 0
                 for di, dj in delta:
                     ni, nj = i + di, j + dj
                     if 0 <= ni < N and 0 <= nj < N:
-                        cnt += 1
-                        if str(classroom[ni][nj]) in ''.join(map(str, student[st][1:])):
+                        if classroom[ni][nj] in student[st][1:]:
                             like += 1
-                        elif not classroom[ni][nj]:
+                        if not classroom[ni][nj]:
                             empty += 1
                         if 4-cnt + like < maxV:
                             break
-                if like > maxV:
-                    maxV = like
-                possible_dict[num] = [(i,j), like, empty]
-            num += 1
-    
-    for t in range(N**2):
-        if possible_dict[t][1] < maxV:
-            del possible_dict[t]
-    if len(possible_dict) == 1:
-        classroom[possible_dict.value()[0][0]][possible_dict.value()[0][1]] = student[st]
-    else:
-        # 빈칸의 갯수
-        pass
+                maxV = max(like, maxV)
+                possible_list.append([like, empty, i, j])
+    arr = sorted(possible_list, key=lambda x : (-x[0], -x[1], x[2], x[3]))
+    classroom[arr[0][2]][arr[0][3]] = student[st][0]
+
+res = 0
+student.sort()
+for i in range(N):
+    for j in range(N):
+        satisfy = 0
+        for di, dj in delta:
+            ni, nj = i + di, j + dj
+            if 0 <= ni < N and 0 <= nj < N:
+                if classroom[ni][nj] in student[classroom[i][j]-1]:
+                    satisfy += 1
+        if satisfy != 0:
+            res += 10 ** (satisfy-1)
+print(res)
+
+'''
+내 식
+좋아하는 친구 비교 시 str으로 변환 후 거기에 있는지 비교하면 
+한자리 수에서 문제 없으나 두자리 수일 때 오류가 난다
+'''
+import sys
+input = sys.stdin.readline
+
+N = int(input())
+student = [list(map(int, input().split())) for _ in range(N**2)]
+classroom = [[0]*N for _ in range(N)]
+delta = (-1,0), (0,1), (1,0), (0,-1)    # 상 우 하 좌
+
+
+for st in range(N**2):
+    possible_list = []
+    maxV = 0
+    for i in range(N):
+        for j in range(N):
+            if not classroom[i][j]:
+                like, empty, cnt = 0, 0, 0
+                # like, empty = 0, 0
+                for di, dj in delta:
+                    ni, nj = i + di, j + dj
+                    if 0 <= ni < N and 0 <= nj < N:
+                        cnt += 1
+                        # if str(classroom[ni][nj]) in ''.join(map(str, student[st][1:])):  # str으로 묶고 비교하면 두자리 수가 나올때 오류가 나버린다
+                        if classroom[ni][nj] in student[st][1:]:
+                            like += 1
+                        if not classroom[ni][nj]:
+                            empty += 1
+                        if 4-cnt + like < maxV:
+                            break
+                maxV = max(like, maxV)
+                possible_list.append([(i,j), like, empty])
+    arr = sorted(possible_list, key=lambda x : (-x[1], -x[2], x[0][0], x[0][1]))
+    classroom[arr[0][0][0]][arr[0][0][1]] = student[st][0]
+
+res = 0
+student.sort()
+for i in range(N):
+    for j in range(N):
+        # for st in student:
+        #     if classroom[i][j] == st[0]:
+        satisfy = 0
+        for di, dj in delta:
+            ni, nj = i + di, j + dj
+            # if 0 <= ni < N and 0 <= nj < N and (str(classroom[ni][nj]) in ''.join(map(str, st[1:]))):
+            if 0 <= ni < N and 0 <= nj < N:
+                if classroom[ni][nj] in student[classroom[i][j]-1]:
+                    satisfy += 1
+        if satisfy == 1:            
+            res += 1
+        elif satisfy == 2:
+            res += 10
+        elif satisfy == 3:
+            res += 100
+        elif satisfy == 4:
+            res += 1000
+print(res)
