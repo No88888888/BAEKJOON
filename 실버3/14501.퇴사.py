@@ -37,48 +37,59 @@ Pi	10	20	10	20	15	40	200
 소요 날을 더해 N보다 커지면 return
 상담 가능한 경우의 수 중 수입 가장 큰 것을 저장
 '''
+# import sys
+# input= sys.stdin.readline
+
+# def jaegui(day, ssum):
+#     global maxV
+#     if ssum > maxV:
+#         maxV = ssum
+#     if day >= N:
+#         return
+#     if day + counseling[day][0] <= N:
+#         jaegui(day + counseling[day][0], ssum + counseling[day][1])
+#     jaegui(day + 1, ssum)
+
+# N = int(input())
+# counseling = [list(map(int, input().split())) for _ in range(N)]
+# maxV = 0
+
+# for i in range(N):
+#     jaegui(i, 0)
+# print(maxV)
+
+
 import sys
 input= sys.stdin.readline
 
-def jaegui(day, ssum):
-    global maxV
-    if ssum > maxV:
-        maxV = ssum
-    if day >= N:
-        return
-    if day + counseling[day][0] <= N:
-        jaegui(day + counseling[day][0], ssum + counseling[day][1])
-    jaegui(day + 1, ssum)
-
 N = int(input())
-counseling = [list(map(int, input().split())) for _ in range(N)]
-maxV = 0
+T, P = zip(*[list(map(int, input().split())) for _ in range(N)])
+dp = [0] * (N+1)
 
-for i in range(N):
-    jaegui(i, 0)
-print(maxV)
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-#     if i + counseling[i][0] >= N:
-#         break
-#     sum = counseling[i][1]
-#     while i < N:
-#         if i + counseling[i][0] >= N:
-#             break
-#         i += counseling[i][0]
-#         print(i)
-#         sum += counseling[i][1]
-#     if sum > maxV:
-#         maxV = sum
-# print(sum)
+for i in range(N-1, -1, -1):
+    if T[i] + i <= N:
+        print(T[i] + i)
+        dp[i] = max(dp[i+T[i]] + P[i], dp[i+1])
+    else:
+        dp[i] = dp[i+1]
+print(dp[0])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -18,6 +18,26 @@
 출력
 1번부터 n번의 직원까지 칭찬을 받은 정도를 출력하시오.
 '''
+
+# 최저 시간을 위한 코드 156ms
+
+import sys
+input = sys.stdin.readline
+def gkatn():
+    N, M = map(int, input().split())
+    emp = [0] + list(map(int, input().split())) # 0 패딩 포함시켜 상하관계 입력
+    dp = [0] * (N+1)                            # 직원들 각각의 최종 칭찬량을 담을 배열
+    for _ in range(M):
+        E, S = map(int, input().split())        # 직원번호와 칭찬량을 받아서 
+        dp[E] += S                              # 해당 직원에게 더해줌(동일 직원 2번이상 칭찬할 수 있으므로 +로)
+    for i in range(2, N+1):                     # 사장 제외하고 2번 직원부터
+        dp[i] += dp[emp[i]]                     # 본인의 직속 상사의 칭찬량과 본인의 칭찬량을 더해 최종 본인 칭찬량을 저장한다
+    print(*dp[1:])                              # 패딩 때문에 필요없는 0번을 제외하고 1번부터 출력
+gkatn()             # 함수로 호출하는 것이 더 빠름
+
+
+# 본 코드 216ms
+
 import sys
 input = sys.stdin.readline
 
@@ -26,12 +46,14 @@ emp = [0] + list(map(int, input().split()))                 # 0 패딩 포함시
 com = [list(map(int, input().split())) for _ in range(M)]   # 직원번호, 칭찬 입력
 dp = [0] * N                                                # 최종 칭찬량
 
-for num, s in com:          # 최고 직속 상사의 칭찬량을 디폴트값으로 넣어줌
-    dp[num-1] += s
+for E, s in com:          # 최고 직속 상사의 칭찬량을 디폴트값으로 넣어줌
+    dp[E-1] += s
 
 for i in range(2, N+1):     # 사장 제외(2번 직원부터 시작)
     dp[i-1] = dp[emp[i]-1] + dp[i-1]    # 본인 직속 상사의 칭찬량과 자신의 칭찬량을 더함
 print(*dp)
+
+
 
 #19% 시간초과
 # import sys
@@ -54,9 +76,9 @@ print(*dp)
 # for i in range(N):
 #     if emp[i] > 0:
 #         ch[emp[i]].append(i+1)
-# for num, s in com:
-#     dp[num-1] += s
-#     dfs(num, s)
+# for E, s in com:
+#     dp[E-1] += s
+#     dfs(E, s)
 # print(*dp)
 
     
@@ -80,9 +102,9 @@ print(*dp)
 #                 ch[emp[x]].append(i)
 #                 stack.append(emp[x])
 # for _ in range(M):
-#     num, s = map(int, input().split())
-#     dp[num-1] += s
-#     for i in ch[num]:
+#     E, s = map(int, input().split())
+#     dp[E-1] += s
+#     for i in ch[E]:
 #         dp[i-1] += s
 # print(*dp)   
 
