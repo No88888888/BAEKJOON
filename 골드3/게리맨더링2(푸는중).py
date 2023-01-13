@@ -37,3 +37,6 @@ x = 2, y = 4, d1 = 2, d2 = 2	x = 2, y = 5, d1 = 3, d2 = 2	x = 4, y = 3, d1 = 1, 
 1 ≤ A[r][c] ≤ 100
 '''
 
+N = int(input())
+gary = [list(map(int, input().split())) for _ in range(N)]
+
