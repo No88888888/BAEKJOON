@@ -22,45 +22,54 @@ stack = []
 for i in range(len(duck)):
     if duck[i] == 'q':
         if stack == []:
-            stack.append(duck[i])
-            duck[i] = 0
+            stack.append([duck[i]])
         else:
             for j in range(len(stack)):
                 if stack[j][-1] == 'k':
                     stack[j].append(duck[i])
-                    duck[i] = 0
                     break
             else:
-                stack.append(duck[i])
-                duck[i] = 0
+                stack.append([duck[i]])
     elif duck[i] == 'u':
         for j in range(len(stack)):
             if stack[j][-1] == 'q':
                 stack[j].append(duck[i])
-                duck[i] = 0
                 break
+        else:
+            print(-1)
+            exit()
     elif duck[i] == 'a':
         for j in range(len(stack)):
             if stack[j][-1] == 'u':
                 stack[j].append(duck[i])
-                duck[i] = 0
                 break
+        else:
+            print(-1)
+            exit()
     elif duck[i] == 'c':
         for j in range(len(stack)):
             if stack[j][-1] == 'a':
                 stack[j].append(duck[i])
-                duck[i] = 0
                 break
+        else:
+            print(-1)
+            exit()
     elif duck[i] == 'k':
         for j in range(len(stack)):
             if stack[j][-1] == 'c':
                 stack[j].append(duck[i])
-                duck[i] = 0
                 break
-if len(set(duck)) != 1 or (len(set(duck)) == 1 and set(duck) != 0):
-    print(-1)
-else:
-    print(len(stack))
+        else:
+            print(-1)
+            exit()
+cnt = 0
+for j in range(len(stack)):
+    if len(stack[j]) % 5 == 0:
+        cnt += 1
+    else:
+        print(-1)
+        exit()
+print(cnt)
 # cnt = 0
 # for k in range(len(stack)):
 #     if not len(stack[k]) % 5:
