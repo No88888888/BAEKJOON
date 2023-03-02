@@ -12,40 +12,64 @@
 출력
 첫째 줄에 말이 지날 수 있는 최대의 칸 수를 출력한다.
 '''
-import time
-def dfs():
-    maxdis = 0
-    cnt = 1
-    while stack:
-        x, y = stack.pop()
-        for di, dj in delta:
-            ni, nj = x + di, y + dj
-            if 0 <= ni < R and 0 <= nj < C and visited[x][y] >= visited[ni][nj] and alpha[ni][nj] not in letter:
-                visited[ni][nj] = visited[x][y] + 1
-                letter.append(alpha[ni][nj])
-                stack.append((ni, nj))
-                cnt += 1
-                break
-        else:
-            maxdis = max(cnt, maxdis)
-            letter.pop()
-            stack.append((x, y))
-            cnt -= 1
+import sys
+input = sys.stdin.readline
+
+def dfs(x, y, cnt):
+    global ans
+    ans = max(ans, cnt)
+    visited.add(alpha[x][y])
+
+    for di, dj in delta:
+        ni, nj = x + di, y + dj
+        if 0 <= ni < R and 0 <= nj < C and alpha[ni][nj] not in visited:
+            dfs(ni, nj, cnt+1)
             
-            
-    print(visited)
-    # print(stack)
-    # print(cnt)
-    return maxdis
+    visited.remove(alpha[x][y])
 
 R, C = map(int, input().split())
 
 alpha = [list(input()) for _ in range(R)]
 delta = (-1, 0), (0, 1), (1, 0), (0,-1)
-visited = [[0]*C for _ in range(R)]
-visited[0][0] = 1
-stack = [(0,0)]
-letter = []
-letter.append(alpha[0][0])
+visited = set()
+ans = 0
 
-print(dfs())
+dfs(0, 0, 1)
+print(ans)
+
+# def dfs():
+#     maxdis = 0
+#     cnt = 1
+#     while stack:
+#         x, y = stack.pop()
+#         for di, dj in delta:
+#             ni, nj = x + di, y + dj
+#             if 0 <= ni < R and 0 <= nj < C and visited[x][y] >= visited[ni][nj] and alpha[ni][nj] not in letter:
+#                 visited[ni][nj] = visited[x][y] + 1
+#                 letter.append(alpha[ni][nj])
+#                 stack.append((ni, nj))
+#                 cnt += 1
+#                 break
+#         else:
+#             maxdis = max(cnt, maxdis)
+#             letter.pop()
+#             stack.append((x, y))
+#             cnt -= 1
+            
+            
+#     print(visited)
+#     # print(stack)
+#     # print(cnt)
+#     return maxdis
+
+# R, C = map(int, input().split())
+
+# alpha = [list(input()) for _ in range(R)]
+# delta = (-1, 0), (0, 1), (1, 0), (0,-1)
+# visited = [[0]*C for _ in range(R)]
+# visited[0][0] = 1
+# stack = [(0,0)]
+# letter = []
+# letter.append(alpha[0][0])
+
+# print(dfs())
