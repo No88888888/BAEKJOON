@@ -23,25 +23,26 @@ nca.png
 '''
 import sys
 input = sys.stdin.readline
+
 for _ in range(int(input())):
     N = int(input())
-    ch = [[] for _ in range(N+1)]
-    par = [[] for _ in range(N+1)]
-    for i in range(N-1):
-        A, B = map(int, input().split())
-        ch[A].append(B)
-        par[B].append(A)
-    mom = []
-    X, Y = map(int, input().split())
-    mom.append(X)
+    par = [[] for _ in range(N+1)]          # 본인의 부모 노드를 담을 par
+    
+    for _ in range(N-1):
+        A, B = map(int, input().split())    # 간선정보
+        par[B].append(A)                    # 부모 정보 생성
+        
+    X, Y = map(int, input().split())        # 공통 조상을 구할 두 노드
+    mom = []                                # 둘의 부모 노드들을 담을 배열
+    mom.append(X)                           # 본인이 공통 부모 노드일 수 있기 때문에 배열에 담고 시작
     mom.append(Y)
     while 1:
-        if par[X]:
-            if par[X][0] not in mom:
-                mom.append(par[X][0])
-                X = par[X][0]
-            else:
-                print(par[X][0])
+        if par[X]:                          # 부모가 있다면
+            if par[X][0] not in mom:        # 부모가 mom 배열에 없다면
+                mom.append(par[X][0])       # 부모 노드를 mom 배열에 담고
+                X = par[X][0]               # 부모를 X로 치환
+            else:                           # mom 배열에 있다면
+                print(par[X][0])            # 그 노드가 공통 보상 노드이므로 출력하고 끝낸다
                 break
         if par[Y]:
             if par[Y][0] not in mom:
