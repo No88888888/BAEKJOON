@@ -8,6 +8,7 @@ n개의 정점을 갖는 이진 트리의 정점에 1부터 n까지의 번호가
 출력
 첫째 줄에 프리오더를 출력한다.
 '''
+# 구글링 1
 import sys
 input = sys.stdin.readline
 sys.setrecursionlimit(10 ** 6)
@@ -36,6 +37,7 @@ for i in range(N):
 
 find_tree(0, N-1, 0, N-1)
 
+# 구글링 2
 import sys
 input = sys.stdin.readline
 sys.setrecursionlimit(10 ** 6)
