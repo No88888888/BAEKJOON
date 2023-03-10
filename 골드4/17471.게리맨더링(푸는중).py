@@ -43,14 +43,20 @@
 2 ≤ N ≤ 10
 1 ≤ 구역의 인구 수 ≤ 100
 '''
+import sys
+sys.RecursionErrorlimit(10*6)
+
 from collections import deque
 def bfs(s):
     stack = deque()
     stack.append(s)
     visited = [0]*(N+1)
     visited[s] = 1
+    areaA= []
     while stack:
         v = stack.pop(0)
+        for i in range(1, len(adjlist)):
+            
         for w in adjlist[v]:
             if not visited[w]:
 N = int(input())
