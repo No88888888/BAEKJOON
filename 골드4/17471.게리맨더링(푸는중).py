@@ -43,11 +43,23 @@
 2 ≤ N ≤ 10
 1 ≤ 구역의 인구 수 ≤ 100
 '''
-
+from collections import deque
+def bfs(s):
+    stack = deque()
+    stack.append(s)
+    visited = [0]*(N+1)
+    visited[s] = 1
+    while stack:
+        v = stack.pop(0)
+        for w in adjlist[v]:
+            if not visited[w]:
 N = int(input())
 popular = list(map(int, input().split()))
 adjlist = [[] for _ in range(N+1)]
 for i in range(1, N+1):
     temp = list(map(int, input().split()))
     adjlist[i].extend(temp[1:])
+min_val = 1000
+for i in range(1, N+1):
+    bfs(i)
 print(adjlist)
