@@ -44,28 +44,158 @@
 1 ≤ 구역의 인구 수 ≤ 100
 '''
 import sys
-sys.RecursionErrorlimit(10*6)
-
+input = sys.stdin.readline
 from collections import deque
-def bfs(s):
+from itertools import combinations
+# sys.stdin = open('게리멘더링.txt', 'r')
+
+# 연결이 되어있는지 확인하는 함수
+def is_connected(group):
     stack = deque()
-    stack.append(s)
-    visited = [0]*(N+1)
-    visited[s] = 1
-    areaA= []
+    stack.append(group[0])
+    visited = [0] * (N+1)
+    visited[group[0]] = 1
+
     while stack:
-        v = stack.pop(0)
-        for i in range(1, len(adjlist)):
-            
-        for w in adjlist[v]:
-            if not visited[w]:
+        u = stack.popleft()
+        for v in adjlist[u]:
+            if v in group and not visited[v]:
+                stack.append(v)
+                visited[v] = 1
+    for g in group:
+        if visited[g] == 0:
+            return False
+    return True
+
 N = int(input())
-popular = list(map(int, input().split()))
+popular = [0] + list(map(int, input().split()))
 adjlist = [[] for _ in range(N+1)]
 for i in range(1, N+1):
     temp = list(map(int, input().split()))
     adjlist[i].extend(temp[1:])
-min_val = 1000
-for i in range(1, N+1):
-    bfs(i)
-print(adjlist)
+
+# 정점들
+V = [i for i in range(1, N+1)]
+rst = float('inf')
+# 두 그룹으로 나누기 때문에 N//2+1 이상으로 넘어가면 조합이 중복되어 똑같은 작업을 한다.
+for i in range(1, N//2+1):
+    # group1에 대해선 itertools사용, group2는 자동적으로 group1을 포함하지 않는 그룹임
+    for group1 in combinations(V, i):
+        group2 = [j for j in V if j not in group1]
+        # 두 그룹에 대해서 연결이 되는 그래프인지 확인을 해봐야된다.
+        if is_connected(group1) and is_connected(group2):
+            group1_num = sum([popular[g] for g in group1])
+            group2_num = sum([popular[g] for g in group2])
+            rst = min(rst, abs(group1_num-group2_num))
+if rst == float('inf'):
+    print(-1)
+else:
+    print(rst)
+
+
+# def bfs(arr_A):
+#     global min_val, flag
+#     for j in range(1, N+1):
+#         if j not in arr_A:
+#             areaB = [j]
+#             stackB = deque()
+#             stackB.append(j)
+#             while stackB:
+#                 v = stackB.popleft()
+#                 for w in adjlist[v]:
+#                     if w not in areaB and w not in arr_A:
+#                         stackB.append(w)
+#                         areaB.append(w)
+#             if len(arr_A) + len(areaB) == N:
+#                 areaA_popular = 0
+#                 areaB_popular = 0
+#                 for x in arr_A:
+#                     areaA_popular += popular[x]
+#                 for y in areaB:
+#                     areaB_popular += popular[y]
+#                 min_val = min(min_val, abs(areaA_popular-areaB_popular))
+#                 flag = True
+#                 return
+            
+# def dfs(s, L):
+#     visited[s] = 1
+#     if len(areaA) == L:
+#         bfs(areaA)
+#     while stack:
+#         v = stack.pop()
+#         for w in adjlist[v]:
+#             if not visited[w]:
+#                 stack.append(w)
+#                 areaA.append(w)
+#                 dfs(w, L+1)
+#                 areaA.pop()
+#                 visited[w] = 0
+                
+# N = int(input())
+# popular = [0] + list(map(int, input().split()))
+# adjlist = [[] for _ in range(N+1)]
+# for i in range(1, N+1):
+#     temp = list(map(int, input().split()))
+#     adjlist[i].extend(temp[1:])
+# min_val = float('inf')
+# flag = False
+# for i in range(1, N//2):
+#     areaA= [i]
+#     stack = []
+#     stack.append(i)
+#     visited = [0] * (N+1)
+#     dfs(i, 1)
+# print(min_val) if flag else print(-1)
+
+# def bfs(arr_A):
+#     global min_val, flag
+#     for j in range(1, N+1):
+#         if j not in arr_A:
+#             areaB = [j]
+#             stackB = [j]
+#             while stackB:
+#                 v = stackB.pop(0)
+#                 for w in adjlist[v]:
+#                     if w not in areaB and w not in arr_A:
+#                         stackB.append(w)
+#                         areaB.append(w)
+#             if len(arr_A) + len(areaB) == N:
+#                 areaA_popular = 0
+#                 areaB_popular = 0
+#                 for x in arr_A:
+#                     areaA_popular += popular[x]
+#                 for y in areaB:
+#                     areaB_popular += popular[y]
+#                 min_val = min(min_val, abs(areaA_popular-areaB_popular))
+#                 flag = True
+#                 return
+            
+# def dfs(s, L):
+#     visited[s] = 1
+#     if len(areaA) == L:
+#         bfs(areaA)
+#     while stack:
+#         v = stack.pop()
+#         for w in adjlist[v]:
+#             if not visited[w]:
+#                 stack.append(w)
+#                 areaA.append(w)
+#                 dfs(w, L+1)
+#                 areaA.pop()
+#                 visited[w] = 0
+                
+# N = int(input())
+# popular = [0] + list(map(int, input().split()))
+# adjlist = [[] for _ in range(N+1)]
+# for i in range(1, N+1):
+#     temp = list(map(int, input().split()))
+#     adjlist[i].extend(temp[1:])
+# min_val = 1000
+# flag = False
+# for i in range(1, N+1):
+#     areaA= [i]
+#     stack = []
+#     stack.append(i)
+#     visited = [0] * (N+1)
+#     dfs(i, 1)
+# print(min_val) if flag else print(-1)
