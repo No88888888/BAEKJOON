@@ -29,45 +29,58 @@ I는 J에게, J는 K에게, D는 G에게, E는 H에게 각각 마약을 공급�
 '''
 import sys
 input = sys.stdin.readline
+from collections import deque
 
 N, M = map(int, input().split())
-drug = [[] for _ in range(N)]
-par = [[] for _ in range(N)]
+ch = [[] for _ in range(N)]             # 내가 마약 공급해주는 사람 리스트   (자식 )
+par = [[] for _ in range(N)]            # 나한테 마약 공급해주는 사람 리스트 (부모 )
 res = N
 for i in range(M):
     x, y = map(str, input().split())
-    drug[ord(x)-65].append(ord(y)-65)
-    par[ord(y)-65].append(ord(x)-65)
-print(drug)
-print(par)
+    ch[ord(x)-65].append(ord(y)-65)     # 자식 정보를 int로 변환하여 저장(A:0, B:1 ...)
+    par[ord(y)-65].append(ord(x)-65)    # 부모 "
 
-# arrest = []
-temp = list(input().split())
-narcos = temp[1:]
-arrest_num = int(temp[0])
+temp = list(input().split())            # 체포당한 사람 정보
+arrest_num = int(temp[0])               # 체포당한 사람 수
+arrest = []
+for t in temp[1:]:
+    arrest.append(ord(t)-65)            # 체포당한 사람 정보를 int로 변환하여 저장
 
-for j in range(arrest_num):
-    print(ord(narcos[j])-65)
-    if par[ord(narcos[j])-65] == []:
-        for k in range(len(drug[ord(narcos[j])-65])):
-            print(drug[ord(narcos[j])-65][k])
-            print(par[drug[ord(narcos[j])-65][k]])
-            par[drug[ord(narcos[j])-65][k]].remove(narcos)
-print(par)
+stack = deque(arrest[:])
+while stack:                            # bfs로 공급받는 사람들 다 잡기                    
+    v = stack.popleft()
+    par[v] = []                         # 일단 체포당한사람을 마약공급책에서 삭제
+    for w in ch[v]:                     # 자식들을 확인
+        if w not in arrest:             # 해당 자식이 아직 체포 당하지 않았다면
+            par[w].remove(v)            # 마약 공급책에서 삭제
+            if par[w] == []:            # 해당사람에게 공급해주는 다른 마약공급책이 없다면
+                arrest.append(w)        # 체포하고
+                stack.append(w)         # 다음 자식 확인 위해 인스택
+res -= par.count([])                    # 전체 숫자에서 체포당한 마약공급책 + 마약 원산지 숫자를 뺀 나머지
+print(res)
+
+# for j in range(arrest_num):
+#     print(ord(arrest[j])-65)
+#     if par[ord(arrest[j])-65] == []:
+#         for k in range(len(ch[ord(arrest[j])-65])):
+#             print(ch[ord(arrest[j])-65][k])
+#             print(par[ch[ord(arrest[j])-65][k]])
+#             par[ch[ord(arrest[j])-65][k]].remove(ord(arrest[k])-65)
+# print(par)
     
     
-#     if par[ord(narcos[k])-65] == []:
+#     if par[ord(arrest[k])-65] == []:
 #         res += 1
-#     arrest.append(ord(narcos[k]) - 65)
+#     arrest.append(ord(arrest[k]) - 65)
 # # print(res)
 # # print(arrest)
-# for j in narcos:
+# for j in arrest:
 #     stack = []
 #     stack.append(ord(j)-65)
 #     while stack:
 #         v = stack.pop(0)
-#         if drug[v]:
-#             for w in drug[v]:
+#         if ch[v]:
+#             for w in ch[v]:
 #                 if w not in arrest:
 #                     arrest.append(w)
 #                     stack.append(w)
