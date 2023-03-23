@@ -31,4 +31,3 @@ while True:
     print()
         
     
-    # lotto(k, s)
