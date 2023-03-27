@@ -18,12 +18,41 @@
 
 각 테스트 케이스 사이에는 빈 줄을 하나 출력한다.
 '''
-from itertools import combinations
+# combinations 사용 풀이
+# from itertools import combinations
+# while True:
+#     numbers = list(map(int,input().split()))
+#     if not numbers[0]:
+#         exit()
+#     k, s = numbers[0], numbers[1:]
+#     for i in combinations(s, 6):
+#         for j in range(6):
+#             print(i[j], end=' ')
+#         print()
+#     print()
+        
+    
+# 백트래킹 이용 풀이
+import sys
+input = sys.stdin.readline
+
+def lotto(idx):
+    if len(comb) == 6 and comb not in ans:
+        ans.append(sorted(comb))
+        return
+    else:
+        for i in range(idx, k):
+            if s[i] not in comb:
+                comb.append(s[i])
+                lotto(i)
+                comb.pop()
+            
 while True:
     numbers = list(map(int,input().split()))
     if not numbers[0]:
         exit()
     k, s = numbers[0], numbers[1:]
+<<<<<<< HEAD
     for i in combinations(s, 6):
         for j in range(6):
             print(i[j], end=' ')
@@ -32,3 +61,11 @@ while True:
 # combinations 미사용 해야됨
         
     
+=======
+    comb = []
+    ans = []
+    lotto(0)
+    for i in ans:
+        print(*i)
+    print()
+>>>>>>> 7b987497c8956a70dd7794e8bce90842ea075a0c
