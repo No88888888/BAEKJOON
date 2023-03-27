@@ -52,20 +52,9 @@ while True:
     if not numbers[0]:
         exit()
     k, s = numbers[0], numbers[1:]
-<<<<<<< HEAD
-    for i in combinations(s, 6):
-        for j in range(6):
-            print(i[j], end=' ')
-        print()
-    print()
-# combinations 미사용 해야됨
-        
-    
-=======
     comb = []
     ans = []
     lotto(0)
     for i in ans:
         print(*i)
     print()
->>>>>>> 7b987497c8956a70dd7794e8bce90842ea075a0c
