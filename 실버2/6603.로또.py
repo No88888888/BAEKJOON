@@ -29,5 +29,6 @@ while True:
             print(i[j], end=' ')
         print()
     print()
+# combinations 미사용 해야됨
         
     
