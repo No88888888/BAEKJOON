@@ -14,17 +14,17 @@
 
 def jump():
     stack = [a]
-    visited = [-1] * (N)
+    visited = [-1] * (N)    # 점프 횟수 기록
     visited[a] = 0
     while stack:
         node = stack.pop(0)
-        for n in range(node, N, bridge[node]):
+        for n in range(node, N, bridge[node]):  # 오른쪽으로 뛰기
             if visited[n] == -1:
                 stack.append(n)
                 visited[n] = visited[node] + 1
-                if n == b:
-                    return visited[n]
-        for n in range(node, -1, -bridge[node]):
+                if n == b:              # 목표위치면
+                    return visited[n]   # 거기까지 오는데 걸린 점프횟수 출력
+        for n in range(node, -1, -bridge[node]):# 왼쪽으로 뛰기
             if visited[n] == -1:
                 stack.append(n)
                 visited[n] = visited[node] + 1
@@ -33,9 +33,9 @@ def jump():
     return -1
 
 N = int(input())
-bridge = list(map(int, input().split()))
-a, b = map(int, input().split())
-a -= 1
+bridge = list(map(int, input().split()))    # 징검다리
+a, b = map(int, input().split())            # 시작위치, 목표위치
+a -= 1          # 인덱싱
 b -= 1
 print(jump())
     # if s < 0 or s > len(bridge):
