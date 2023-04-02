@@ -20,15 +20,17 @@ N×N개의 수가 N×N 크기의 표에 채워져 있다. (x1, y1)부터 (x2, y2
 '''
 import sys
 input = sys.stdin.readline
+def gkatn():
+    for i in range(1,N+1):
+        for j in range(1, N+1):
+            arr[i][j] = arr[i][j-1] + arr[i][j]         # 각 행은 앞 요소까지의 합 + 자기자신으로 먼저 합을 해놓고
+            memo[i][j] = arr[i][j] + memo[i-1][j]       # 전 행의 동일 열까지의 합과 자기를 더해 0,0부터 자기까지의 합을 구한다
+    for _ in range(M):
+        x1, y1, x2, y2 = map(int, input().split())      # 합을 구할 두개의 좌표
+        hap = memo[x2][y2] - memo[x1-1][y2] - memo[x2][y1-1] + memo[x1-1][y1-1] # x2,y2의 값에서 ((x2, y1-1) + (x1-1, y2)) 값을 빼주고 중복으로 뺀 (x1-1, y1-1)값을 더해준다
+        print(hap)
 
 N, M = map(int, input().split())
 arr = [[0] * (N+1)] + [[0] + list(map(int, input().split())) for _ in range(N)] # 패딩해서 받기
 memo = [[0]*(N+1) for _ in range(N+1)]              # (0,0)부터 각 좌표까지의 합 담을 배열
-for i in range(1,N+1):
-    for j in range(1, N+1):
-        arr[i][j] = arr[i][j-1] + arr[i][j]         # 각 행은 앞 요소까지의 합 + 자기자신으로 먼저 합을 해놓고
-        memo[i][j] = arr[i][j] + memo[i-1][j]       # 전 행의 동일 열까지의 합과 자기를 더해 0,0부터 자기까지의 합을 구한다
-for _ in range(M):
-    x1, y1, x2, y2 = map(int, input().split())      # 합을 구할 두개의 좌표
-    hap = memo[x2][y2] - memo[x1-1][y2] - memo[x2][y1-1] + memo[x1-1][y1-1] # x2,y2의 값에서 ((x2, y1-1) + (x1-1, y2)) 값을 빼주고 중복으로 뺀 (x1-1, y1-1)값을 더해준다
-    print(hap)
+gkatn()
