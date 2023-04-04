@@ -30,46 +30,44 @@ import sys
 input = sys.stdin.readline
 
 def blow():
-    flag = True
-    chain = 0
+    flag = True                             # 더 터질 뿌요가 있는지 확인하는 flag
+    chain = 0                               # 연쇄 횟수 셀 변수
     while flag:
-        bomb = []
+        bomb = []                           # 한 연쇄에서 함께 터지는 뿌요들 담을 배열
         visited = [[0]*12 for _ in range(6)]
         
         for i in range(6):
             for j in range(12):
-                if puyopuyo[i][j] != '.' and not visited[i][j]:
-                    stack = []
-                    stack.append((i,j))
-                    visited[i][j] = 1
-                    cnt = 1
-                    temp = [(i,j)]
+                if puyopuyo[i][j] != '.' and not visited[i][j]: # 빈칸이 아니고 미방문이라면
+                    stack = []                                  
+                    stack.append((i,j))                         # 탐색을 위해 in stack
+                    visited[i][j] = 1                           # 방문처리
+                    cnt = 1                                     # 4개 뿌요가 모여있는지 세기위한 cnt
+                    temp = [(i,j)]                              # 4개 이상일 시 bomb에 담기위한 temp
                     while stack:
                         x, y = stack.pop()
                         for di, dj in delta:
                             ni,nj = x + di, y +dj
-                            if 0 <= ni < 6 and 0 <= nj < 12 and puyopuyo[x][y] == puyopuyo[ni][nj] and not visited[ni][nj]:
-                                stack.append((ni,nj))
-                                temp.append((ni,nj))
-                                visited[ni][nj] = 1
-                                cnt += 1
-                    if cnt >= 4:
-                        # print(temp)
-                        bomb.extend(temp)
-        if bomb:
-            # print(bomb)
-            for k in range(len(bomb)):
-                puyopuyo[bomb[k][0]][bomb[k][1]] = '.'
-            for li in puyopuyo:
+                            if 0 <= ni < 6 and 0 <= nj < 12 and puyopuyo[x][y] == puyopuyo[ni][nj] and not visited[ni][nj]: # 범위 내고 같은 뿌요면서 미방문이면
+                                stack.append((ni,nj))           # 스택에 담고
+                                temp.append((ni,nj))            # temp에도 담는다
+                                visited[ni][nj] = 1             # 방문처리
+                                cnt += 1                        # 뿌요 개수 + 1
+                    if cnt >= 4:                                # 해당 뿌요가 4개 이상 모여있으면
+                        bomb.extend(temp)                       # 이번 연쇄에 터질 bomb에 저장                   
+        if bomb:                                                # 끝까지 순회 후 터질 bomb이 있다면
+            for k in range(len(bomb)):                  
+                puyopuyo[bomb[k][0]][bomb[k][1]] = '.'          # 터트리고
+            for li in puyopuyo:                                 # 빈자리를 없앤다음
                 while '.' in li:
                     li.remove('.')
-            for li in puyopuyo:
+            for li in puyopuyo:                                 # 뒷자리를 빈칸으로 다시 채운다
                 while len(li) < 12:
                     li.append('.')
-            chain += 1
+            chain += 1                                          # 연쇄 + 1
         
         else:
-            flag = False
+            flag = False                                        # 필드 전체 순회 후 터질 뿌요가 없었다면 그만 탐색위해 flag를 False로 변환
                         
     return chain
 puyo = [list(input()) for _ in range(12)]
@@ -78,5 +76,5 @@ delta = (-1,0) , (0,1), (1,0), (0,-1)
 
 for i in range(6):
     for j in range(12):
-        puyopuyo[i][j] = puyo[11-j][i]
+        puyopuyo[i][j] = puyo[11-j][i]      # 배열을 시계방향으로 90도 회전
 print(blow())
