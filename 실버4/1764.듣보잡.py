@@ -14,16 +14,16 @@ from collections import defaultdict
 import sys
 input = sys.stdin.readline
 N, M = map(int, input().split())
-DB = defaultdict(int)
-temp = []
+DB = defaultdict(int)       # int 디폴트 딕셔너리 선언
+temp = []                   # 두번 나온 이름 담을 리스트
 for i in range(N+M):
     name = input().strip()
-    if DB[name]:
-        temp.append(name)
-    else:
-        DB[name] += 1
-temp.sort()
-print(len(temp))
+    if DB[name]:            # 이름이 두번나오면
+        temp.append(name)   # temp에 넣는다
+    else:                   # 처음나온 이름이면
+        DB[name] += 1       # 딕셔너리에 넣는다
+temp.sort()                 # 두번나온 이름 정렬하고
+print(len(temp))            # 출력
 for n in temp:
     print(n)
 
