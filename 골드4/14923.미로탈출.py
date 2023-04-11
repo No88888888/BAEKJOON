@@ -95,7 +95,7 @@ arr = []
 for _ in range(N):
     arr.append(list(map(int, input().split())))
 
-visited = [[[0,0] for i in range(M)] for _ in range(N)]
+visited = [[[0,0] for i in range(M)] for _ in range(N)] # 3차원 방문 표 (0번인덱스는 해당 좌표를 마법 안쓰고 왔을 떄 거리, 1번 인덱스는 마법 사용하고 왔을때 거리)
 
 bfs(hx, hy)
 
