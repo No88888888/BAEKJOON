@@ -20,25 +20,90 @@ N X M 행렬
 출력
 D (탈출 할 수 없다면, -1을 출력한다.)
 '''
-def exodus():
-    delta = (-1,0), (0,1), (1,0), (0,-1)
-    stack = [(Hx, Hy)]
-    visited = [[-1]*M for _ in range(N)]
-    visited[Hx][Hy] = 0
-    while stack:
-        x, y = stack.pop(0)
-        for dx, dy in delta:
-            nx, ny = x + dx, y + dy
-            if 0 <= nx < N and 0 <= ny < M:
-                pass
-                
-N, M = map(int, input().split())
-Hx, Hy = map(int, input().split())
-Hx -= 1
-Hy -= 1
-Ex, Ey = map(int, input().split())
-Ex -= 1
-Ey -= 1
-miro = [list(map(int, input().split())) for _ in range(N)]
+# def exodus():
+#     delta = (-1,0), (0,1), (1,0), (0,-1)
+#     stack = [(Hx, Hy, 1)]
+#     visited = [[[-1, -1] for _ in range(M)] for _ in range(N)]
+#     visited[Hx][Hy] = [0,-1]
+#     while stack:
+#         x, y, magic = stack.pop(0)
+#         if x == Ex and y == Ey:
+#             return visited[x][y][0] 
+#         for dx, dy in delta:
+#             nx, ny = x + dx, y + dy
+#             if 0 <= nx < N and 0 <= ny < M:
+#                 if miro[nx][ny] == 1:
+#                     if magic == 1 and visited[nx][ny][1] == -1:
+#                         stack.append((nx, ny, 0))
+#                         visited[nx][ny][1] = visited[x][y][0] + 1
+#                 elif miro[nx][ny] == 0:
+#                     if magic == 1 and visited[nx][ny][0] == -1:
+#                         stack.append((nx,ny, magic))
+#                         visited[nx][ny][0] = visited[x][y][0] + 1
+#                     elif magic == 0 and visited[nx][ny][1] == -1:
+#                         stack.append((nx,ny,magic))
+#                         visited[nx][ny][1] = visited[x][y][1] + 1
+#                 print(nx, ny)
+#     return -1
+# N, M = map(int, input().split())
+# Hx, Hy = map(int, input().split())
+# Hx -= 1
+# Hy -= 1
+# Ex, Ey = map(int, input().split())
+# Ex -= 1
+# Ey -= 1
+# miro = [list(map(int, input().split())) for _ in range(N)]
+# print('----------------------')
+# print(exodus())
 
-exodus()
+
+
+def bfs(x, y):
+    q = []
+    q.append((x, y, 1)) # x, y, 남은 스킬 사용횟수
+    visited[x][y] = [1,1]
+    while q:
+        x, y, skill= q.pop(0)
+        for dx, dy in [(1,0), (-1,0), (0, 1), (0, -1)]:
+            nx, ny = x + dx, y + dy
+            if N > nx >= 0 and M > ny >= 0:
+                if arr[nx][ny] == 1: # 벽을 만났을 때
+                    if visited[nx][ny][1] == 0 and skill == 1: 
+                        visited[nx][ny][1] = visited[x][y][0] + 1
+                        q.append((nx, ny, 0))
+                else: # 벽이 아닐때
+                    if skill == 0 and visited[nx][ny][1] == 0:
+                        visited[nx][ny][1] = visited[x][y][1] + 1
+                        q.append((nx, ny, 0))
+                    elif skill == 1 and visited[nx][ny][0] == 0:
+                        visited[nx][ny][0] = visited[x][y][0] + 1
+                        q.append((nx, ny, 1))
+            print(visited)
+
+
+
+N, M =map(int, input().split())
+hx, hy = map(int, input().split())
+hx -= 1
+hy -= 1
+ex, ey = map(int, input().split())
+ex -= 1
+ey -= 1
+
+arr = []
+
+for _ in range(N):
+    arr.append(list(map(int, input().split())))
+
+visited = [[[0,0] for i in range(M)] for _ in range(N)]
+
+bfs(hx, hy)
+
+ans = visited[ex][ey]
+if sum(ans) == 0:
+    print(-1)
+else:
+    if ans[0] * ans[1] == 0:
+        print(max(ans) - 1)
+    else:
+        print(min(ans) - 1)
