@@ -20,90 +20,46 @@ N X M 행렬
 출력
 D (탈출 할 수 없다면, -1을 출력한다.)
 '''
-# def exodus():
-#     delta = (-1,0), (0,1), (1,0), (0,-1)
-#     stack = [(Hx, Hy, 1)]
-#     visited = [[[-1, -1] for _ in range(M)] for _ in range(N)]
-#     visited[Hx][Hy] = [0,-1]
-#     while stack:
-#         x, y, magic = stack.pop(0)
-#         if x == Ex and y == Ey:
-#             return visited[x][y][0] 
-#         for dx, dy in delta:
-#             nx, ny = x + dx, y + dy
-#             if 0 <= nx < N and 0 <= ny < M:
-#                 if miro[nx][ny] == 1:
-#                     if magic == 1 and visited[nx][ny][1] == -1:
-#                         stack.append((nx, ny, 0))
-#                         visited[nx][ny][1] = visited[x][y][0] + 1
-#                 elif miro[nx][ny] == 0:
-#                     if magic == 1 and visited[nx][ny][0] == -1:
-#                         stack.append((nx,ny, magic))
-#                         visited[nx][ny][0] = visited[x][y][0] + 1
-#                     elif magic == 0 and visited[nx][ny][1] == -1:
-#                         stack.append((nx,ny,magic))
-#                         visited[nx][ny][1] = visited[x][y][1] + 1
-#                 print(nx, ny)
-#     return -1
-# N, M = map(int, input().split())
-# Hx, Hy = map(int, input().split())
-# Hx -= 1
-# Hy -= 1
-# Ex, Ey = map(int, input().split())
-# Ex -= 1
-# Ey -= 1
-# miro = [list(map(int, input().split())) for _ in range(N)]
-# print('----------------------')
-# print(exodus())
+from collections import deque
+import sys
+input = sys.stdin.readline
 
-
-
-def bfs(x, y):
-    q = []
-    q.append((x, y, 1)) # x, y, 남은 스킬 사용횟수
-    visited[x][y] = [1,1]
-    while q:
-        x, y, skill= q.pop(0)
-        for dx, dy in [(1,0), (-1,0), (0, 1), (0, -1)]:
+def exodus():
+    delta = (-1,0), (0,1), (1,0), (0,-1)
+    stack = deque([(Hx, Hy, 1)])
+    while stack:
+        x, y, magic = stack.popleft()
+        for dx, dy in delta:
             nx, ny = x + dx, y + dy
-            if N > nx >= 0 and M > ny >= 0:
-                if arr[nx][ny] == 1: # 벽을 만났을 때
-                    if visited[nx][ny][1] == 0 and skill == 1: 
-                        visited[nx][ny][1] = visited[x][y][0] + 1
-                        q.append((nx, ny, 0))
-                else: # 벽이 아닐때
-                    if skill == 0 and visited[nx][ny][1] == 0:
-                        visited[nx][ny][1] = visited[x][y][1] + 1
-                        q.append((nx, ny, 0))
-                    elif skill == 1 and visited[nx][ny][0] == 0:
-                        visited[nx][ny][0] = visited[x][y][0] + 1
-                        q.append((nx, ny, 1))
-            print(visited)
+            if 0 <= nx < N and 0 <= ny < M:
+                if miro[nx][ny] == 1:                               # 벽이라면
+                    if magic == 1 and visited[nx][ny][1] == 0:      # 마법 안썼고 마법써서 방문한 곳이 아니라면
+                        visited[nx][ny][1] = visited[x][y][0] + 1   # 마법써서 도착했을 때 거리를 1 더함
+                        stack.append((nx, ny, 0))                   # 마법 쓴 상태로 인 스택
+                elif miro[nx][ny] == 0:                             # 벽 아니라면
+                    if magic == 1 and visited[nx][ny][0] == 0:      # 마법을 안썼고 마법 안썼을 떄 방문한 곳이 아니라면
+                        visited[nx][ny][0] = visited[x][y][0] + 1   # 마법 안쓰고 방문했을 떄 거리 1 더함
+                        stack.append((nx,ny, magic))                # 마법 안 쓴 상대로 인스택
+                    elif magic == 0 and visited[nx][ny][1] == 0:    # 마법 쓴 상태고 마법 쓰고 방문한 곳이 아니라면
+                        visited[nx][ny][1] = visited[x][y][1] + 1   # 마법 써서 방문한 거리 1 더함
+                        stack.append((nx,ny,magic))                 # 마법 쓴 상태로 인스택
+N, M = map(int, input().split())
+Hx, Hy = map(int, input().split())      # 출발 좌표
+Hx -= 1                                 # 인덱스 맞추기
+Hy -= 1
+Ex, Ey = map(int, input().split())      # 도착위치
+Ex -= 1                                 # 인덱스 맞추기
+Ey -= 1
+miro = [list(map(int, input().split())) for _ in range(N)]  # 미로
 
+visited = [[[0, 0] for _ in range(M)] for _ in range(N)]    # 3차원 visited(0번인덱스=마법 안쓰고 해당 좌표왔을때 거리,1번인덱스=마법 쓰고 해당 좌표 왔을 떄 거리)
+visited[Hx][Hy] = [1,1]                 # 출발 좌표 방문 표시
+exodus()
 
-
-N, M =map(int, input().split())
-hx, hy = map(int, input().split())
-hx -= 1
-hy -= 1
-ex, ey = map(int, input().split())
-ex -= 1
-ey -= 1
-
-arr = []
-
-for _ in range(N):
-    arr.append(list(map(int, input().split())))
-
-visited = [[[0,0] for i in range(M)] for _ in range(N)] # 3차원 방문 표 (0번인덱스는 해당 좌표를 마법 안쓰고 왔을 떄 거리, 1번 인덱스는 마법 사용하고 왔을때 거리)
-
-bfs(hx, hy)
-
-ans = visited[ex][ey]
-if sum(ans) == 0:
-    print(-1)
-else:
-    if ans[0] * ans[1] == 0:
-        print(max(ans) - 1)
-    else:
-        print(min(ans) - 1)
+if visited[Ex][Ey] == [0,0]:                                # 도착지점 방문 못했으면
+    print(-1)                                               # -1 출력
+else:                                                       # 방문했다면
+    if visited[Ex][Ey][0] * visited[Ex][Ey][1] == 0:        # 벽을 뚫고 갔을때나 안뚫고 갔을때 둘 중 하나만 도착했다면
+        print(max(visited[Ex][Ey])-1)                       # 가능했던 경우의 거리를 출력
+    else:                                                   # 둘다 도착 가능했다면
+        print(min(visited[Ex][Ey])-1)                       # 둘 중 최소 거리 출력
