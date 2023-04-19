@@ -13,25 +13,66 @@
 첫째 줄에 뽑힌 정수들의 개수를 출력하고, 그 다음 줄부터는 뽑힌 정수들을 작은 수부터 큰 수의 순서로 한 줄에 하나씩 출력한다.
 '''
 
-def comb(temp, length):
-    global cnt
-    if len(temp) == length:
-        print(temp)
+# def comb(temp, length):
+#     global cnt
+#     if len(temp) == length:
+#         print(temp)
     
-    for i in range(1, N+1):
-        if visited[i] == 0:
-            temp.append(i)
-            visited[i] = 1
-            comb(temp, cnt)
+#     for i in range(1, N+1):
+#         if visited[i] == 0:
+#             temp.append(i)
+#             visited[i] = 1
+#             comb(temp, cnt)
             
-            visited[temp.pop()] = 0
-            print(visited)
-    cnt += 1
+#             visited[temp.pop()] = 0
+#             print(visited)
+#     cnt += 1
+# N = int(input())
+# dict = {}
+# for i in range(1,N+1):
+#     dict[i] = int(input())
+# number = [i for i in range(1,N+1)]
+# cnt = 1
+# visited = [0 for _ in range(N+1)]
+# comb([], cnt)
+
+import time
+def gkatn(temp, lth):
+    global max_length
+    if len(temp) == lth:
+        arr = []
+        for i in range(lth):
+            arr.append(ch[temp[i]])
+        print(temp)
+        print(arr)
+        time.sleep(5)
+        if sorted(arr) == sorted(temp):
+            max_length = max(len(arr), max_length)
+            print(max_length)
+            exit()
+        return
+    r = 0
+    for j in range(1, N+1):
+        if used[j] == 0 and r != ch[j]:
+            used[j] = 1
+            r = ch[j]
+            temp.append(j)
+            gkatn(temp, lth)
+            temp.pop()
+            used[j] = 0
+        
+        
+        
 N = int(input())
-dict = {}
+ch = [0]
 for i in range(1,N+1):
-    dict[i] = int(input())
-number = [i for i in range(1,N+1)]
-cnt = 1
-visited = [0 for _ in range(N+1)]
-comb([], cnt)
+    ch.append(int(input()))
+print(ch)
+
+max_length = 0
+length = 1
+
+for k in range(1, N+1):
+    used = [0]*(N+1)
+    gkatn([], k)
+print(max_length)
