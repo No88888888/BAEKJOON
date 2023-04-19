@@ -12,67 +12,107 @@
 출력
 첫째 줄에 뽑힌 정수들의 개수를 출력하고, 그 다음 줄부터는 뽑힌 정수들을 작은 수부터 큰 수의 순서로 한 줄에 하나씩 출력한다.
 '''
-
-# def comb(temp, length):
-#     global cnt
-#     if len(temp) == length:
-#         print(temp)
+# 시간초과
+def comb(temp, length):
+    global cnt
+    if len(temp) == length:
+        print(temp)
     
-#     for i in range(1, N+1):
-#         if visited[i] == 0:
-#             temp.append(i)
-#             visited[i] = 1
-#             comb(temp, cnt)
+    for i in range(1, N+1):
+        if visited[i] == 0:
+            temp.append(i)
+            visited[i] = 1
+            comb(temp, cnt)
             
-#             visited[temp.pop()] = 0
-#             print(visited)
-#     cnt += 1
-# N = int(input())
-# dict = {}
-# for i in range(1,N+1):
-#     dict[i] = int(input())
-# number = [i for i in range(1,N+1)]
-# cnt = 1
-# visited = [0 for _ in range(N+1)]
-# comb([], cnt)
+            visited[temp.pop()] = 0
+            print(visited)
+    cnt += 1
+N = int(input())
+dict = {}
+for i in range(1,N+1):
+    dict[i] = int(input())
+number = [i for i in range(1,N+1)]
+cnt = 1
+visited = [0 for _ in range(N+1)]
+comb([], cnt)
 
-import time
-def gkatn(temp, lth):
-    global max_length
+import sys
+input = sys.stdin.readline
+def gkatn(start, temp, lth):
+    global max_length, ans
     if len(temp) == lth:
         arr = []
         for i in range(lth):
+            if ch[temp[i]] in arr:
+                return
             arr.append(ch[temp[i]])
-        print(temp)
-        print(arr)
-        time.sleep(5)
-        if sorted(arr) == sorted(temp):
+        A, B = sorted(arr), sorted(temp)
+        if A == B:
             max_length = max(len(arr), max_length)
-            print(max_length)
-            exit()
+            ans = A
         return
-    r = 0
-    for j in range(1, N+1):
-        if used[j] == 0 and r != ch[j]:
+    for j in range(start, N+1):
+        if used[j] == 0:
             used[j] = 1
-            r = ch[j]
             temp.append(j)
-            gkatn(temp, lth)
+            gkatn(j, temp, lth)
             temp.pop()
             used[j] = 0
-        
-        
-        
 N = int(input())
-ch = [0]
-for i in range(1,N+1):
-    ch.append(int(input()))
-print(ch)
+ch = [0] + [int(input()) for _ in range(N)]
 
 max_length = 0
-length = 1
-
+ans = []
 for k in range(1, N+1):
     used = [0]*(N+1)
-    gkatn([], k)
+    gkatn(1, [], k)
 print(max_length)
+for r in ans:
+    print(r)
+
+import sys
+
+input = sys.stdin.readline
+
+N = int(input())
+
+adj = [[] for _ in range(N + 1)]
+
+for i in range(1, N + 1):
+    adj[i].append(int(input()))
+
+
+# DFS로 탐색하다가 사이클 발생한 것들을 다 더하면 된다 !!
+
+def dfs(num):
+    if visited[num] == False:
+        visited[num] = True
+        for a in adj[num]:
+
+            tmp_up.add(num)
+            tmp_bottom.add(a)
+            print(tmp_up)
+            print(tmp_bottom)
+            if tmp_up == tmp_bottom:
+                ans.extend(list(tmp_bottom))
+                return
+
+            dfs(a)
+    visited[num] = False
+
+
+ans = []
+
+for i in range(1, N + 1):
+    visited = [False] * (N + 1)  # 위에 값 기준으로
+    tmp_up = set()
+    tmp_bottom = set()
+
+    dfs(i)
+
+ans = list(set(ans))
+ans.sort()
+
+print(len(ans))
+for a in ans:
+    print(a)
