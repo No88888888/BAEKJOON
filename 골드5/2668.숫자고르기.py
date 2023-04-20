@@ -12,30 +12,8 @@
 출력
 첫째 줄에 뽑힌 정수들의 개수를 출력하고, 그 다음 줄부터는 뽑힌 정수들을 작은 수부터 큰 수의 순서로 한 줄에 하나씩 출력한다.
 '''
-# 시간초과
-def comb(temp, length):
-    global cnt
-    if len(temp) == length:
-        print(temp)
-    
-    for i in range(1, N+1):
-        if visited[i] == 0:
-            temp.append(i)
-            visited[i] = 1
-            comb(temp, cnt)
-            
-            visited[temp.pop()] = 0
-            print(visited)
-    cnt += 1
-N = int(input())
-dict = {}
-for i in range(1,N+1):
-    dict[i] = int(input())
-number = [i for i in range(1,N+1)]
-cnt = 1
-visited = [0 for _ in range(N+1)]
-comb([], cnt)
 
+# 시간초과
 import sys
 input = sys.stdin.readline
 def gkatn(start, temp, lth):
@@ -116,3 +94,26 @@ ans.sort()
 print(len(ans))
 for a in ans:
     print(a)
+
+# def comb(temp, length):
+#     global cnt
+#     if len(temp) == length:
+#         print(temp)
+    
+#     for i in range(1, N+1):
+#         if visited[i] == 0:
+#             temp.append(i)
+#             visited[i] = 1
+#             comb(temp, cnt)
+            
+#             visited[temp.pop()] = 0
+#             print(visited)
+#     cnt += 1
+# N = int(input())
+# dict = {}
+# for i in range(1,N+1):
+#     dict[i] = int(input())
+# number = [i for i in range(1,N+1)]
+# cnt = 1
+# visited = [0 for _ in range(N+1)]
+# comb([], cnt)
