@@ -16,6 +16,8 @@
 # 시간초과
 import sys
 input = sys.stdin.readline
+
+
 def gkatn(start, temp, lth):
     global max_length, ans
     if len(temp) == lth:
@@ -36,6 +38,8 @@ def gkatn(start, temp, lth):
             gkatn(j, temp, lth)
             temp.pop()
             used[j] = 0
+
+
 N = int(input())
 ch = [0] + [int(input()) for _ in range(N)]
 
@@ -48,7 +52,6 @@ print(max_length)
 for r in ans:
     print(r)
 
-import sys
 
 input = sys.stdin.readline
 
@@ -99,13 +102,13 @@ for a in ans:
 #     global cnt
 #     if len(temp) == length:
 #         print(temp)
-    
+
 #     for i in range(1, N+1):
 #         if visited[i] == 0:
 #             temp.append(i)
 #             visited[i] = 1
 #             comb(temp, cnt)
-            
+
 #             visited[temp.pop()] = 0
 #             print(visited)
 #     cnt += 1
