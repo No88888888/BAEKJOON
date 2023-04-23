@@ -92,5 +92,24 @@ CCTV의 최대 개수는 8개를 넘지 않는다.
 출력
 첫째 줄에 사각 지대의 최소 크기를 출력한다.
 '''
+
+
+def gkatn():
+    delta = (-1, 0), (0, 1), (1, 0), (0, -1)
+    d, cnt = 0, 0
+    for i in range(M):
+        for j in range(N):
+            if office[i][j] == 1:
+                stack = [(i, j)]
+                while stack:
+                    x, y = stack.pop()
+                    ni, nj = x + delta[d][0], y + delta[d][1]
+                    if 0 <= ni < N and 0 <= nj < M and office[ni][nj] != 6 and office[ni][nj] != '#':
+                        stack.append((ni, nj))
+                        office[ni][nj] = '#'
+                        cnt += 1
+
+
 N, M = map(int, input().split())
 office = [list(map(int, input().split())) for _ in range(N)]
+gkatn()
