@@ -52,7 +52,6 @@ from collections import deque
 import sys
 input = sys.stdin.readline
 
-
 def gkatn(p, q):
     global visited
     delta = (-1, 0), (0, 1), (1, 0), (0, -1)
@@ -60,19 +59,15 @@ def gkatn(p, q):
     stack.append((p, q))
     while stack:
         x, y = stack.popleft()
-        for di, dj in delta:
-            # 사방으로 이어져있기 떄문에 인덱스 조정 필요
+        for di, dj in delta:                                    # 사방으로 이어져있기 떄문에 인덱스 조정 필요
             ni, nj = (x + di) % N, (y + dj) % M
             if not visited[ni][nj] and planet[ni][nj] != 1:     # 미방문이고 벽이 아니라면
-                # 방문처리하고 해당 구역에 추가
-                visited[ni][nj] = 1
+                visited[ni][nj] = 1                             # 방문처리하고 해당 구역에 추가
                 stack.append((ni, nj))
-
 
 N, M = map(int, input().split())
 
 planet = [list(map(int, input().split())) for _ in range(N)]    # 도넛행성 정보
-
 visited = [[0] * M for _ in range(N)]                           # 방문 표시
 cnt = 0                                                         # 빈구역 갯수
 for i in range(N):
