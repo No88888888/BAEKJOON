@@ -17,7 +17,6 @@ public class findroad_11403 {
         for (int i = 0; i < N; i++) {
             int a = sc.nextInt();
             int b = sc.nextInt();
-            tree
         }
 
     }
