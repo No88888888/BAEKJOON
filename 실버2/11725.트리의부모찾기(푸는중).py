@@ -10,18 +10,24 @@
 '''
 import sys
 input = sys.stdin.readline
-N =int(input())
-tree = [0]*(N+1)
+
+N =int(input())                         # 노드의 개수
+tree = [[] for _ in range(N+1)]         # 트리 정보를 담을 배열
+par = [0] * (N+1)                       # 최종 부모 노드 정보 담을 배열
+
 for i in range(N-1):
-    a, b= map(int, input().split())
-    if a == 1:
-        tree[b] = a
-    elif b == 1:
-        tree[a] = b
-    else:
-        if tree[b]:
-            tree[a] = b
-        else:
-            tree[b] = a
-for i in range(2, N+1):
-    print(tree[i])
+    a, b = map(int, input().split())     # 일단 양방향 간선으로 입력 받음
+    tree[a].append(b)
+    tree[b].append(a)
+
+stack = [1]                             # 루트 노드 1이라 가정, 루트노드부터 아래로 내려가며 탐색
+while stack:
+    v = stack.pop()                     # 현재 노드 v
+    for w in tree[v]:                   # 연결된 노드들 w를 탐색
+        if par[w]:                      # w의 부모 노드가 이미 결정되어 있다면
+            continue                    # 넘어가고
+        par[w] = v                      # 없다면 현재노드 v가 w의 부모 노드
+        stack.append(w)                 # 다음 탐색을 위해 stack 추가
+        
+for k in range(2, N+1):                 # 2번 노드부터 부모 노드 정보 출력
+    print(par[k])
