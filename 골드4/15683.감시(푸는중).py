@@ -92,25 +92,57 @@ CCTV의 최대 개수는 8개를 넘지 않는다.
 출력
 첫째 줄에 사각 지대의 최소 크기를 출력한다.
 '''
-import copy
-def gkatn():
-    delta = (-1, 0), (0, 1), (1, 0), (0, -1)
-    d, cnt = 0, 0
-    temp = office.deepcopy()
-    for i in range(N):
-        for j in range(M):
-            if office[i][j] not in [0,6] and temp[i][j] != '#':
-                stack = [(i, j)]
-                while stack:
-                    x, y = stack.pop()
-                    ni, nj = x + delta[d][0], y + delta[d][1]
-                    if 0 <= ni < N and 0 <= nj < M and office[ni][nj] != 6 and office[ni][nj] != '#':
-                        stack.append((ni, nj))
-                        temp[ni][nj] = '#'
-                        cnt += 1
 
+import copy
+import sys
+input = sys.stdin.readline
+
+def dfs(graph, depth):                              # 첫번째 cctv부터 탐색 시작
+    global answer
+    if depth == len(cctv_list):                     # 전체 cctv를 다 봤다면
+        answer = min(answer, count_zero(graph))     # 사각지대 최솟값을 반환
+        return
+    else:
+        graph_copy = copy.deepcopy(graph)           # 사무실 정보를 복사
+        x, y, cctv_num = cctv_list[depth]           # 지금 cctv 정보
+        for vec in cctv[cctv_num]:                  # 지금 cctv의 탐색 방향별로
+            watch(x, y, vec, graph_copy)            # 감시 구역 확인
+            dfs(graph_copy, depth + 1)              # 현 상황에서 그 다음 cctv 탐색(재귀적)
+            graph_copy = copy.deepcopy(graph)       # cctv 다른 반향으로 회전 시킨 후 재 탐색 위해
+            
+def watch(x, y, dir, graph):                        # cctv 감시구역 구하는 함수
+    for d in dir:                                   # 해당 cctv의 탐색 방향 순회
+        ni, nj = x, y
+        while True:
+            ni += delta[d][0]
+            nj += delta[d][1]
+            if 0 <= ni < N and 0 <= nj < M:
+                if graph[ni][nj] == 6:              # 벽이면 종료
+                    break
+                elif graph[ni][nj] == 0:            # 감시 가능 구역이면 감시구역으로 추가
+                    graph[ni][nj] = '#'
+            else:                                   # 이외 구역이면 종료
+                break
+
+def count_zero(graph):                              # 모든 cctv 봤을 때 사각지대 구하는 함수
+    cnt = sum(graph, []).count(0)
+    return cnt
 
 N, M = map(int, input().split())
-office = [list(map(int, input().split())) for _ in range(N)]
-cctv = {1:[0,1,2,3], 2:[0, 1], 3:[0,1,2,3], 4:[0,1,2,3], 5:[0]}
-gkatn()
+office = [list(map(int, input().split())) for _ in range(N)]# 전체 사무실 정보
+cctv_list = []                                              # cctv 좌표와 종류를 담을 배열
+answer = sys.maxsize                                        # 사각지대 최소 개수
+
+for i in range(N):
+    for j in range(M):
+        if 1<= office[i][j] <= 5:
+            cctv_list.append((i,j,office[i][j]))            # cctv 정보 담는다
+            
+cctv = {1:[[0], [1], [2], [3]],                             # 각 cctv별 감시 방향 정보
+        2:[[0, 2], [1, 3]], 
+        3:[[0, 1], [1, 2], [2, 3], [0, 3]], 
+        4:[[0, 1, 2], [1, 2, 3], [0, 2, 3], [0, 1, 3]], 
+        5:[[0, 1, 2, 3]]}
+delta = (-1, 0), (0, 1), (1, 0), (0, -1)                    # 탐색을 위한 delta
+dfs(office, 0)                                              # dfs로 탐색
+print(answer)
