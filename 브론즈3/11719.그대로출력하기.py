@@ -8,3 +8,9 @@
 출력
 입력받은 그대로 출력한다.
 '''
+while True:
+    try:
+        print(input())
+    except EOFError:
+        break
+        
