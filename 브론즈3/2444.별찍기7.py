@@ -9,10 +9,8 @@
 첫째 줄부터 2×N-1번째 줄까지 차례대로 별을 출력한다.
 '''
 
-N = int(input())
-for i in range(1, 2*N):
-    if i <= N:
-        print(' '* (N-i), end = '')
-        print('*'* ((2 * i)-1))
-    # else:
-    #     print()
+N=int(input())
+for i in range(1,N+1):
+    print(" "*(N-i)+"*"*(2*i-1))
+for k in range(N-1,0,-1):
+    print(" "*(N-k)+"*"*(2*k-1))
