@@ -28,32 +28,29 @@ LB : 왼쪽 아래 대각선으로
 '''
 
 
-King, Stone, N = map(str, input().split())
+King, Stone, N = map(str, input().split())          # 킹 위치, 돌 위치, 킹 이동횟수
 N = int(N)
-kx, ky = 8-int(King[1]), ord(King[0])-65
-sx, sy = 8-int(Stone[1]), ord(Stone[0])-65
-delta = {"T" : (-1,0), "RT" : (-1,1), "R" : (0,1), "RB" : (1,1), "B" : (1,0), "LB" : (1,-1), "L" : (0,-1), "LT" : (-1,-1)}
+
+kx, ky = 8-int(King[1]), ord(King[0])-65            # 킹 위치 2차원 상 표시
+sx, sy = 8-int(Stone[1]), ord(Stone[0])-65          # 돌 위치 2차원 상 표시
+delta = {"T" : (-1,0), "RT" : (-1,1), "R" : (0,1), "RB" : (1,1), "B" : (1,0), "LB" : (1,-1), "L" : (0,-1), "LT" : (-1,-1)} # 이동 방향
 move = [input() for _ in range(N)]
+
 for m in range(N):
     i, j = delta[move[m]]
-    # print("이동방향 :", i, j)
-    nkx, nky = kx + i, ky + j
-    # print("새위치 :", nkx, nky)
-    if not 0 <= nkx <= 7 or not 0 <= nky <= 7:
-        continue
-    else:
-        if nkx == sx and nky == sy:
-            nsx, nsy = sx + i, sy + j
-            if not 0 <= nsx <= 7 or not 0 <= nsy <= 7:
-                continue
-            else:
-                kx, ky, sx, sy = nkx, nky, nsx, nsy
-        else:
-            kx, ky = nkx, nky
+    nkx, nky = kx + i, ky + j                       #  킹 이동 후 새로운 위치
+    if not 0 <= nkx <= 7 or not 0 <= nky <= 7:      # 새 위치가 체스판 밖으로 나가면
+        continue                                    # 무시하고 다음 무브로
+    else:                                           # 체스판 안쪽이면
+        if nkx == sx and nky == sy:                 # 새 위치가 돌의 위치면
+            nsx, nsy = sx + i, sy + j               # 돌도 같은 방향으로 움직이고
+            if not 0 <= nsx <= 7 or not 0 <= nsy <= 7:  # 돌의 새 위치가 체스판 밖이면
+                continue                            # 무시하고 다음 무브로
+            else:                                   # 체스판 안쪽이면
+                kx, ky, sx, sy = nkx, nky, nsx, nsy # 킹, 돌 모두 새 위치로 이동
+        else:                                       # 돌 위치가 아니면
+            kx, ky = nkx, nky                       # 킹만 새 위치로 이동
     
-    # print("i, j :", i, j)
-King = chr(ky+65) + str(8-kx)
+King = chr(ky+65) + str(8-kx)                       # 2차원 위치를 체스판 표시로 변환
 Stone = chr(sy+65) + str(8-sx)
 print(King, Stone)
-# print("kx, ky :", kx, ky)
-# print("sx, sy :", sx, sy)
