@@ -12,7 +12,7 @@ public class sortnumber_2 {
         StringBuilder sb = new StringBuilder();
         int N = Integer.parseInt(br.readLine());
         ArrayList<Integer> arr = new ArrayList<>();
-
+        
         for (int i = 0; i < N; i++) {
             arr.add(Integer.parseInt(br.readLine()));
         }
